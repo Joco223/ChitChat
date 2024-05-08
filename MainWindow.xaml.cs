@@ -1,4 +1,6 @@
 ﻿using ChitChat.Helpers;
+using ChitChat.Services;
+using ChitChat.ViewModels;
 using Supabase.Gotrue;
 using System.Text;
 using System.Windows;
@@ -19,67 +21,83 @@ namespace ChitChat
 	public partial class MainWindow : Window
 	{
 		private bool registerMode = false;
+		private readonly UserService userService = UserService.Instance;
+		public RegisterUser registerUser = new();
+
 		private SupabaseHandler supabaseHandler = SupabaseHandler.GetHandler();
 
 		public MainWindow()
 		{
 			InitializeComponent();
+			DataContext = registerUser;
 		}
+
+		private void clearInput()
+		{
+			email.Text = "";
+            password.Password = "";
+            confirmPassword.Password = "";
+            registerUser.ClearData();
+		}
+
+		private void showLoginForm()
+		{
+            usernameLabel.Visibility = Visibility.Collapsed;
+            username.Visibility = Visibility.Collapsed;
+            confirmPasswordLabel.Visibility = Visibility.Collapsed;
+            confirmPassword.Visibility = Visibility.Collapsed;
+            cancelRegistrationButton.Visibility = Visibility.Collapsed;
+            loginButton.Visibility = Visibility.Visible;
+            registerMode = false;
+			clearInput();
+        }
+
+		private void showRegistrationForm()
+		{
+            usernameLabel.Visibility = Visibility.Visible;
+            username.Visibility = Visibility.Visible;
+            confirmPasswordLabel.Visibility = Visibility.Visible;
+            confirmPassword.Visibility = Visibility.Visible;
+            cancelRegistrationButton.Visibility = Visibility.Visible;
+            loginButton.Visibility = Visibility.Collapsed;
+            registerMode = true;
+            clearInput();
+        }
 
 		async private void registerButton_Click(object sender, RoutedEventArgs e)
 		{
 			if (registerMode)
 			{
 				// Check if username, email, and password are not empty
-				if (string.IsNullOrEmpty(username.Text) || string.IsNullOrEmpty(email.Text) || string.IsNullOrEmpty(password.Password))
+				if (!registerUser.IsRegisterValid())
 				{
-					MessageBox.Show("Username, email, and password are required", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					MessageBox.Show("All fields are required", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
 
                 // Check if email is valid
+				// Implement regex check if email is valid
+				//if (!registerUser.IsEmailValid())
+				//{
 
+				//}
 
                 // Register user
-				if (password.Password == confirmPassword.Password)
+				if (registerUser.PasswordsMatch())
 				{
-					Dictionary<string, object> data = new()
+					bool result = await userService.RegisterUser(registerUser);
+
+					if (result)
 					{
-						{ "username", username.Text }
-					};
+                        MessageBox.Show("User registered successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-					SignUpOptions options = new Supabase.Gotrue.SignUpOptions()
-					{ 
-						Data = data
-					};
-
-					try
-					{
-                        Session? session = await supabaseHandler.Client.Auth.SignUp(email.Text, password.Password, options);
-
-                        if (session != null)
-                        {
-                            MessageBox.Show("User registered successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                            usernameLabel.Visibility = Visibility.Collapsed;
-                            username.Visibility = Visibility.Collapsed;
-                            confirmPasswordLabel.Visibility = Visibility.Collapsed;
-                            confirmPassword.Visibility = Visibility.Collapsed;
-                            cancelRegistrationButton.Visibility = Visibility.Collapsed;
-                            loginButton.Visibility = Visibility.Visible;
-							email.Text = "";
-							password.Password = "";
-                            registerMode = false;
-                        }
-                        else
-                        {
-                            MessageBox.Show("Failed to register user", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        }
+                        // Clear form
+                        showLoginForm();
                     }
-					catch (Exception ex)
+                    else
 					{
-                        MessageBox.Show("Failed to register user, " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                        throw;
-					}
+                        MessageBox.Show("User registration failed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
 				}
 				else
 				{
@@ -89,25 +107,13 @@ namespace ChitChat
             else
 			{
                 // Show registration form
-				usernameLabel.Visibility = Visibility.Visible;
-				username.Visibility = Visibility.Visible;
-				confirmPasswordLabel.Visibility = Visibility.Visible;
-				confirmPassword.Visibility = Visibility.Visible;
-				cancelRegistrationButton.Visibility = Visibility.Visible;
-				loginButton.Visibility = Visibility.Collapsed;
-				registerMode = true;
+				showRegistrationForm();
             }
         }
 
 		private void cancelRegistrationButton_Click(object sender, RoutedEventArgs e)
 		{
-			usernameLabel.Visibility = Visibility.Collapsed;
-            username.Visibility = Visibility.Collapsed;
-			confirmPasswordLabel.Visibility = Visibility.Collapsed;
-            confirmPassword.Visibility = Visibility.Collapsed;
-            cancelRegistrationButton.Visibility = Visibility.Collapsed;
-            loginButton.Visibility = Visibility.Visible;
-			registerMode = false;
+			showLoginForm();
         }
 
 		async private void loginButton_Click(object sender, RoutedEventArgs e)
@@ -119,13 +125,31 @@ namespace ChitChat
                 return;
             }
 
-            // Login user
-			Session? session = await supabaseHandler.Client.Auth.SignIn(email.Text, password.Password);
-
-			if (session != null)
+			// Login user
+			try
 			{
-				MessageBox.Show("User logged in successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                Session? session = await supabaseHandler.Client.Auth.SignIn(email.Text, password.Password);
+
+                if (session != null)
+                {
+					// Implement redirect to servers window
+                    MessageBox.Show("User logged in successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
             }
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+        }
+
+		private void password_PasswordChanged(object sender, RoutedEventArgs e)
+		{
+			registerUser.Password = password.Password;
+        }
+
+		private void confirmPassword_PasswordChanged(object sender, RoutedEventArgs e)
+		{
+			registerUser.ConfirmPassword = confirmPassword.Password;
         }
     }
 }
