@@ -91,5 +91,30 @@ namespace ChitChat.Windows
 			serverListWindow.ShowDialog();
 			await refreshJoinedServers();
         }
+
+		private void serverInfoButton_Click(object sender, RoutedEventArgs e)
+		{
+			MessageBox.Show("Feature not implemented", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+		private void serverSettingsButton_Click(object sender, RoutedEventArgs e)
+		{
+            MessageBox.Show("Feature not implemented", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void sendButton_Click(object sender, RoutedEventArgs e)
+		{
+            MessageBox.Show("Feature not implemented", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void attachButton_Click(object sender, RoutedEventArgs e)
+		{
+            MessageBox.Show("Feature not implemented", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        private void accountSettingsButton_Click(object sender, RoutedEventArgs e)
+		{
+            MessageBox.Show("Feature not implemented", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }
