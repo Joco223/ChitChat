@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Supabase.Postgrest.Attributes;
+using Supabase.Postgrest.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,30 +8,49 @@ using System.Threading.Tasks;
 
 namespace ChitChat.Models
 {
-	public class User
+    [Table("Users")]
+	public class User : BaseModel
 	{
+        [PrimaryKey("id", false)]
+        public int Id { get; set; }
+
+        [Column("created_at")]
+        public DateTime createdAt { get; set; }
+
+        [Column("username")]
 		public string Username { get; set; }
 
+        [Column("email")]
         public string Email { get; set; }
+
+        [Column("uuid")]
+        public string Uuid { get; set; }
 
         public User()
         {
-            Username = "";
-            Email = "";
+            Id = 0;
+            createdAt = DateTime.Now;
+            Username = string.Empty;
+            Email = string.Empty;
+            Uuid = string.Empty;
         }
 
         public User(string username, string email)
         {
+            Id = 0;
+            createdAt = DateTime.Now;
             Username = username;
             Email = email;
+            Uuid = string.Empty;
         }
 
-        public Dictionary<string, object> GetCustomData()
+        public User(string username, string email, string uuid)
         {
-            return new Dictionary<string, object>
-            {
-                { "username", Username }
-            };
+            Id = 0;
+            createdAt = DateTime.Now;
+            Username = username;
+            Email = email;
+            Uuid = uuid;
         }
 	}
 }

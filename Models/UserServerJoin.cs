@@ -15,7 +15,7 @@ namespace ChitChat.Models
 		public int Id { get; set; }
 
         [Column("user_id")]
-        public string UserId { get; set; }
+        public int UserId { get; set; }
 
         [Column("server_id")]
         public int ServerId { get; set; }
@@ -26,19 +26,19 @@ namespace ChitChat.Models
         public UserServerJoin()
         {
             Id = -1;
-            UserId = string.Empty;
+            UserId = -1;
             ServerId = -1;
             CreatedAt = DateTime.Now;
         }
 
-        public UserServerJoin(string userId, int serverId)
+        public UserServerJoin(int userId, int serverId)
         {
             UserId = userId;
             ServerId = serverId;
             CreatedAt = DateTime.Now;
         }
 
-        public UserServerJoin(int id, string userId, int serverId)
+        public UserServerJoin(int id, int userId, int serverId)
         {
             Id = id;
             UserId = userId;

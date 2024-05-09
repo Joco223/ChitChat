@@ -18,7 +18,7 @@ namespace ChitChat.Models
 		public string Name { get; set; }
 
 		[Column("created_by")]
-		public string CreatedBy { get; set; }
+		public int CreatedBy { get; set; }
 
 		[Column("created_at")]
 		public DateTime CreatedAt { get; set; }
@@ -27,18 +27,18 @@ namespace ChitChat.Models
 		{
 			Id = -1;
 			Name = string.Empty;
-			CreatedBy = string.Empty;
+			CreatedBy = 0;
 			CreatedAt = DateTime.Now;
 		}
 
-		public Server(string name, string createdBy)
+		public Server(string name, int createdBy)
 		{
 			Name = name;
 			CreatedBy = createdBy;
 			CreatedAt = DateTime.Now;
 		}
 
-		public Server(int id, string name, string createdBy, DateTime createdAt)
+		public Server(int id, string name, int createdBy, DateTime createdAt)
 		{
             Id = id;
             Name = name;

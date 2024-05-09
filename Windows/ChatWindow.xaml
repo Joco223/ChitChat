@@ -21,7 +21,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ListView x:Name="serverListView" BorderThickness="2" Margin="2" Grid.Row="0" SelectionMode="Single" ItemsSource="{Binding Servers}">
+                <ListView x:Name="serverListView" BorderThickness="2" Margin="2" Grid.Row="0" SelectionMode="Single" ItemsSource="{Binding Servers}" SelectionChanged="serverListView_SelectionChanged">
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}"></TextBlock>
@@ -76,7 +76,13 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ListView x:Name="userListView" BorderThickness="2" Margin="2" Grid.Row="0" />
+                <ListView x:Name="userListView" BorderThickness="2" Margin="2" Grid.Row="0" ItemsSource="{Binding CurrentServerUsers}" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Username}"></TextBlock>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <Button x:Name="accountSettingsButton" Content="Account settings" Margin="2" Grid.Row="1" Click="accountSettingsButton_Click" />
             </Grid>
         </GroupBox>

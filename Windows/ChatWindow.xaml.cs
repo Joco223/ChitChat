@@ -31,7 +31,14 @@ namespace ChitChat.Windows
 		private int getSelectedServerId()
 		{
 			Server selectedServer = (Server)serverListView.SelectedItem;
-			return selectedServer.Id;
+			if (selectedServer == null)
+			{
+                return -1;
+			}
+			else
+			{
+				return selectedServer.Id;
+			}
 		}
 
 		private async Task refreshJoinedServers()
@@ -53,6 +60,8 @@ namespace ChitChat.Windows
         private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             await refreshJoinedServers();
+            await chatInterface.GetServerUsers(getSelectedServerId());
+            userListView.GetBindingExpression(ListView.ItemsSourceProperty).UpdateTarget();
         }
 
         private async void createServerButton_Click(object sender, RoutedEventArgs e)
@@ -117,6 +126,12 @@ namespace ChitChat.Windows
 		private void accountSettingsButton_Click(object sender, RoutedEventArgs e)
 		{
             MessageBox.Show("Feature not implemented", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+		private async void serverListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+		{
+			await chatInterface.GetServerUsers(getSelectedServerId());
+            userListView.GetBindingExpression(ListView.ItemsSourceProperty).UpdateTarget();
         }
     }
 }

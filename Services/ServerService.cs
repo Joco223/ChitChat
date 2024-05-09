@@ -15,6 +15,7 @@ namespace ChitChat.Services
         public static ServerService Instance { get => instance; }
 
         private readonly SupabaseHandler supabaseHandler = SupabaseHandler.Instance;
+        private readonly UserService userService = UserService.Instance;
 
 		public ServerService() { }
 
@@ -27,7 +28,9 @@ namespace ChitChat.Services
 
                 if (user != null && user.Id != null)
 				{
-                    var server = new Server(name, user.Id);
+                    var userId = await userService.GetUserId();
+
+                    var server = new Server(name, userId);
 
                     var response = await supabaseHandler.Client.From<Server>().Insert(server);
 
@@ -88,8 +91,9 @@ namespace ChitChat.Services
                 {
                     var serversRequest = await supabaseHandler.Client.From<Server>().Get();
                     var servers = serversRequest.Models;
+                    var userId = await userService.GetUserId();
                     
-                    var userServerJoinRequest = await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.UserId == user.Id).Get();
+                    var userServerJoinRequest = await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.UserId == userId).Get();
                     var userServerJoins = userServerJoinRequest.Models;
 
                     foreach (var server in servers)
@@ -124,7 +128,9 @@ namespace ChitChat.Services
 
                 if (user != null && user.Id != null)
                 {
-                    var request = await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.UserId == user.Id).Get();
+                    var userId = await userService.GetUserId();
+
+                    var request = await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.UserId == userId).Get();
 
                     if (request != null)
                     {
@@ -153,7 +159,9 @@ namespace ChitChat.Services
 
                 if (user != null && user.Id != null)
                 {
-                    var userServerJoin = new UserServerJoin(user.Id, serverId);
+                    var userId = await userService.GetUserId();
+
+                    var userServerJoin = new UserServerJoin(userId, serverId);
 
                     var response = await supabaseHandler.Client.From<UserServerJoin>().Insert(userServerJoin);
 
@@ -180,7 +188,9 @@ namespace ChitChat.Services
 
                 if (user != null && user.Id != null)
                 {
-                    await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.UserId == user.Id && usj.ServerId == serverId).Delete();
+                    var userId = await userService.GetUserId();
+
+                    await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.UserId == userId && usj.ServerId == serverId).Delete();
 
                     return true;
                 }
