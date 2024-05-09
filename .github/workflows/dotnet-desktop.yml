@@ -3,7 +3,7 @@ name: "Deploy ChitChat"
 on:
   push:
     tags:
-      - "chit-chat/v*"
+      - "v1.*"
 
 env:
   PROJECT_PATH: ChitChat.csproj
