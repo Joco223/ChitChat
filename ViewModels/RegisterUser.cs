@@ -9,9 +9,9 @@ namespace ChitChat.ViewModels
 {
 	public class RegisterUser : User
 	{
-        public string? Password { get; set; }
+        public string Password { get; set; }
 
-        public string? ConfirmPassword { get; set; }
+        public string ConfirmPassword { get; set; }
 
 		public RegisterUser() : base()
 		{

@@ -24,7 +24,7 @@ namespace ChitChat
 		private readonly UserService userService = UserService.Instance;
 		public RegisterUser registerUser = new();
 
-		private SupabaseHandler supabaseHandler = SupabaseHandler.GetHandler();
+		private SupabaseHandler supabaseHandler = SupabaseHandler.Instance;
 
 		public MainWindow()
 		{

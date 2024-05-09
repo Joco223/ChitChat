@@ -33,9 +33,6 @@ namespace ChitChat.Helpers
 
         private static readonly SupabaseHandler handler = new();
 
-		public static SupabaseHandler GetHandler()
-        {
-            return handler;
-        }
+		public static SupabaseHandler Instance { get => handler; }
     }
 }

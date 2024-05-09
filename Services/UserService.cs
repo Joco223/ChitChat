@@ -12,7 +12,7 @@ namespace ChitChat.Services
 	public class UserService
 	{
 		private static readonly UserService instance = new();
-		private readonly SupabaseHandler supabaseHandler = SupabaseHandler.GetHandler();
+		private readonly SupabaseHandler supabaseHandler = SupabaseHandler.Instance;
 
         public static UserService Instance { get => instance; }
 
@@ -22,14 +22,10 @@ namespace ChitChat.Services
 		{
             if (registerUser.PasswordsMatch())
 			{
-                Dictionary<string, object> data = new()
-				{
-					{ "username", registerUser.Username }
-                };
 
                 SignUpOptions options = new()
 				{
-                    Data = data
+                    Data = registerUser.GetCustomData(),
                 };
 
                 try

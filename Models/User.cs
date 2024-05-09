@@ -8,9 +8,9 @@ namespace ChitChat.Models
 {
 	public class User
 	{
-		public string? Username { get; set; }
+		public string Username { get; set; }
 
-        public string? Email { get; set; }
+        public string Email { get; set; }
 
         public User()
         {
@@ -22,6 +22,14 @@ namespace ChitChat.Models
         {
             Username = username;
             Email = email;
+        }
+
+        public Dictionary<string, object> GetCustomData()
+        {
+            return new Dictionary<string, object>
+            {
+                { "username", Username }
+            };
         }
 	}
 }
