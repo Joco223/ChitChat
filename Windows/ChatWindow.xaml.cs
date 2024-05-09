@@ -85,6 +85,7 @@ namespace ChitChat.Windows
 			}
         }
 
+		// Joins a server
 		private async void addServerButton_Click(object sender, RoutedEventArgs e)
 		{
 			ServerListWindow serverListWindow = new();
