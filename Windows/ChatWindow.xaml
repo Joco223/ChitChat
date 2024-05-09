@@ -1,0 +1,84 @@
+﻿<Window x:Class="ChitChat.Windows.ChatWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ChitChat.Windows"
+        mc:Ignorable="d"
+        Title="ChatWindow" Height="450" Width="800"
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+    <Grid Margin="5">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <GroupBox Header="Servers" Grid.Column="0">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListView x:Name="serverListView" BorderThickness="2" Margin="2" Grid.Row="0" SelectionMode="Single" ItemsSource="{Binding Servers}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"></TextBlock>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="addServerButton" Content="Join" Margin="2" Grid.Column="0" Click="addServerButton_Click" />
+                    <Button x:Name="removeServerButton" Content="Leave" Margin="2" Grid.Column="1" IsEnabled="False" Click="removeServerButton_Click" />
+                </Grid>
+                <Button x:Name="createServerButton" Content="Create server" Margin="2" Grid.Row="2" Click="createServerButton_Click" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Channels" Grid.Column="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListView x:Name="channelListView" BorderThickness="2" Margin="2" Grid.Row="0" SelectionMode="Single" />
+                <Button x:Name="serverInfoButton" Content="Server info" Margin="2" Grid.Row="1" />
+                <Button x:Name="serverSettingsButton" Content="Server settings" Margin="2" Grid.Row="2" />
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Chat" Grid.Column="2">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListView x:Name="chatListView" BorderThickness="2" Margin="2" Grid.Row="0" />
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="messageTextBox" BorderThickness="2" Margin="2" Grid.Column="0" />
+                    <Button x:Name="sendButton" Content="Send" Margin="2" Grid.Column="1" />
+                    <Button x:Name="attachButton" Content="Attach..." Margin="2" Grid.Column="2" />
+                </Grid>
+            </Grid>
+        </GroupBox>
+        <GroupBox Header="Users" Grid.Column="3">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListView x:Name="userListView" BorderThickness="2" Margin="2" Grid.Row="0" />
+                <Button x:Name="accountSettingsButton" Content="Account settings" Margin="2" Grid.Row="1" />
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>

@@ -1,6 +1,7 @@
 ﻿using ChitChat.Helpers;
 using ChitChat.Services;
 using ChitChat.ViewModels;
+using ChitChat.Windows;
 using Supabase.Gotrue;
 using System.Text;
 using System.Windows;
@@ -132,8 +133,12 @@ namespace ChitChat
 
                 if (session != null)
                 {
-					// Implement redirect to servers window
-                    MessageBox.Show("User logged in successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+					// Implement redirect to Servers window
+                    var chatWindow = new ChatWindow();
+					chatWindow.Show();
+					this.Close();
+					
+					//MessageBox.Show("User logged in successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
 			catch (Exception ex)

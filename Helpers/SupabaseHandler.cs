@@ -15,6 +15,10 @@ namespace ChitChat.Helpers
 		private Client localClient;
 
         public Client Client { get => localClient; set => localClient = value; }
+        
+		private static readonly SupabaseHandler handler = new();
+
+		public static SupabaseHandler Instance { get => handler; }
 
         private SupabaseHandler()
 		{
@@ -31,8 +35,5 @@ namespace ChitChat.Helpers
             localClient.InitializeAsync().Wait();
 		}
 
-        private static readonly SupabaseHandler handler = new();
-
-		public static SupabaseHandler Instance { get => handler; }
     }
 }
