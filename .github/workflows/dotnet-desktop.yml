@@ -1,9 +1,9 @@
 name: "Deploy ChitChat"
 
 on:
-  create:
+  push:
     tags:
-      - "v1.**"
+      - "**"
 
 env:
   PROJECT_PATH: ChitChat.csproj
