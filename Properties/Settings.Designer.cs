@@ -42,5 +42,14 @@ namespace ChitChat.Properties {
                 return ((string)(this["supabaseKey"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("v1.3.0-alpha")]
+        public string AppVersion {
+            get {
+                return ((string)(this["AppVersion"]));
+            }
+        }
     }
 }

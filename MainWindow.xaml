@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ChitChat"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen" ContentRendered="Window_ContentRendered">
     <StackPanel x:Name="loginPanel" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center" >
         <Label Content="ChitChat" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" />
         <Label x:Name="usernameLabel" Content="Username" HorizontalAlignment="Center" Visibility="Collapsed" />

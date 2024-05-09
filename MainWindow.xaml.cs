@@ -22,10 +22,13 @@ namespace ChitChat
 	public partial class MainWindow : Window
 	{
 		private bool registerMode = false;
+
 		private readonly UserService userService = UserService.Instance;
+		private readonly SupabaseHandler supabaseHandler = SupabaseHandler.Instance;
+		private readonly AppInfoService appInfoService = AppInfoService.Instance;
+
 		public RegisterUser registerUser = new();
 
-		private SupabaseHandler supabaseHandler = SupabaseHandler.Instance;
 
 		public MainWindow()
 		{
@@ -155,6 +158,24 @@ namespace ChitChat
 		private void confirmPassword_PasswordChanged(object sender, RoutedEventArgs e)
 		{
 			registerUser.ConfirmPassword = confirmPassword.Password;
+        }
+
+		private async void Window_ContentRendered(object sender, EventArgs e)
+		{
+			string latestAppVersion = await appInfoService.GetAppInfo("AppVersion");
+			string? currentAppVersion = Properties.Settings.Default["AppVersion"].ToString();
+
+			if (string.IsNullOrEmpty(currentAppVersion))
+			{
+				MessageBox.Show("App version not found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				Application.Current.Shutdown();
+			}
+			
+			if (latestAppVersion != currentAppVersion)
+			{
+				MessageBox.Show("New version available. Update to continue using the app.", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
+                Application.Current.Shutdown();
+			}
         }
     }
 }
