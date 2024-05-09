@@ -36,4 +36,4 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pattern: bin/Release/net8.0-windows/publish/win-x64/*.exe
-          release-url: ${{ steps.release_action.outputs.upload_url }}
+          release-url: ${{ steps.create_release.outputs.upload_url }}
