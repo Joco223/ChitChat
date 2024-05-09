@@ -30,9 +30,6 @@ jobs:
         id: release_action
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag: ${{ github.ref }}
-          name: ${{ github.ref }}
 
       - uses: csexton/release-asset-action@v2
         with:
