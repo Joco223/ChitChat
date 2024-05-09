@@ -47,8 +47,8 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <ListView x:Name="channelListView" BorderThickness="2" Margin="2" Grid.Row="0" SelectionMode="Single" />
-                <Button x:Name="serverInfoButton" Content="Server info" Margin="2" Grid.Row="1" />
-                <Button x:Name="serverSettingsButton" Content="Server settings" Margin="2" Grid.Row="2" />
+                <Button x:Name="serverInfoButton" Content="Server info" Margin="2" Grid.Row="1" Click="serverInfoButton_Click" />
+                <Button x:Name="serverSettingsButton" Content="Server settings" Margin="2" Grid.Row="2" Click="serverSettingsButton_Click" />
             </Grid>
         </GroupBox>
         <GroupBox Header="Chat" Grid.Column="2">
@@ -65,8 +65,8 @@
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
                     <TextBox x:Name="messageTextBox" BorderThickness="2" Margin="2" Grid.Column="0" />
-                    <Button x:Name="sendButton" Content="Send" Margin="2" Grid.Column="1" />
-                    <Button x:Name="attachButton" Content="Attach..." Margin="2" Grid.Column="2" />
+                    <Button x:Name="sendButton" Content="Send" Margin="2" Grid.Column="1" Click="sendButton_Click" />
+                    <Button x:Name="attachButton" Content="Attach..." Margin="2" Grid.Column="2" Click="attachButton_Click" />
                 </Grid>
             </Grid>
         </GroupBox>
@@ -77,7 +77,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <ListView x:Name="userListView" BorderThickness="2" Margin="2" Grid.Row="0" />
-                <Button x:Name="accountSettingsButton" Content="Account settings" Margin="2" Grid.Row="1" />
+                <Button x:Name="accountSettingsButton" Content="Account settings" Margin="2" Grid.Row="1" Click="accountSettingsButton_Click" />
             </Grid>
         </GroupBox>
     </Grid>
