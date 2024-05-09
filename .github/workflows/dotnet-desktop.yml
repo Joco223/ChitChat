@@ -16,7 +16,7 @@ jobs:
 
       - uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 8.0
 
       - run: dotnet restore ${{ env.PROJECT_PATH }} -r win-x64
 
@@ -35,5 +35,5 @@ jobs:
       - uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: bin/Release/net8.0-windows/publish/win-x64/publish/*.exe
+          pattern: "D:/a/ChitChat/ChitChat/bin/Release/net8.0-windows/win-x64/publish/*.exe"
           release-url: ${{ steps.create_release.outputs.upload_url }}
