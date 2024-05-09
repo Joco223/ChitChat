@@ -1,9 +1,7 @@
 name: "Deploy ChitChat"
 
 on:
-  push:
-    branches:
-      - "master"
+  create:
     tags:
       - "v1.**"
 
