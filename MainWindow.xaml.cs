@@ -34,6 +34,9 @@ namespace ChitChat
 		{
 			InitializeComponent();
 			DataContext = registerUser;
+
+			// Delete old version of app if it exists
+			appInfoService.DeleteOldVersion();
 		}
 
 		private void clearInput()
@@ -162,19 +165,21 @@ namespace ChitChat
 
 		private async void Window_ContentRendered(object sender, EventArgs e)
 		{
-			string latestAppVersion = await appInfoService.GetAppInfo("AppVersion");
-			string? currentAppVersion = Properties.Settings.Default["AppVersion"].ToString();
+			try
+			{
+				bool latest = await appInfoService.CheckForLatestVersion();
 
-			if (string.IsNullOrEmpty(currentAppVersion))
-			{
-				MessageBox.Show("App version not found", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-				Application.Current.Shutdown();
+				if (!latest)
+				{
+                    MessageBox.Show("New version available. Click OK to update.", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
+					await appInfoService.CheckForLatestVersion();
+				}
 			}
-			
-			if (latestAppVersion != currentAppVersion)
+			catch (Exception ex)
 			{
-				MessageBox.Show("New version available. Update to continue using the app.", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
-                Application.Current.Shutdown();
+				MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				// Exit the app
+				Application.Current.Shutdown();
 			}
         }
     }
