@@ -15,6 +15,13 @@ jobs:
     outputs:
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
+      - name: Conventional Changelog Action
+        id: changelog
+        uses: TriPSs/conventional-changelog-action@v5
+        with:
+          github-token: ${{ secrets.github_token }}
+          output-file: "false"
+
       - uses: actions/create-release@v1
         id: create_release
         env:
@@ -22,6 +29,7 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
+          body: ${{ steps.changelog.outputs.clean_changelog }}
 
   deploy-client:
     runs-on: windows-latest

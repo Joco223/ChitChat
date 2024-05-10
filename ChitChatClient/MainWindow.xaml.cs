@@ -26,6 +26,7 @@ namespace ChitChatClient
 
 		private readonly UserService userService = UserService.Instance;
 		private readonly SupabaseHandler supabaseHandler = SupabaseHandler.Instance;
+		private readonly UpdateService updateService = UpdateService.Instance;
 
 		public RegisterUser registerUser = new();
 
@@ -166,5 +167,16 @@ namespace ChitChatClient
 		{
         }
 
+		private async void checkForUpdatesButton_Click(object sender, RoutedEventArgs e)
+		{
+			if (await updateService.CheckForUpdates())
+			{
+				MessageBox.Show("There is a new version available, run launcher to update", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
+			}
+			else
+			{
+				MessageBox.Show("No updates available", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
+			}
+        }
     }
 }

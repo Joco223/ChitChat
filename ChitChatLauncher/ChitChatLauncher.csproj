@@ -10,7 +10,12 @@
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	<Version>1.1.0</Version>
 	<Platforms>AnyCPU;x64</Platforms>
+	<ApplicationIcon>chitchatlauncher.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="chitchatlauncher.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Octokit" Version="11.0.1" />

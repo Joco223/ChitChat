@@ -10,9 +10,20 @@
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	 <Platforms>AnyCPU;x64</Platforms>
 	 <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+	 <ApplicationIcon>chitchatclient.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="chitchatclient.png" />
+    <None Remove="Resources\chitchatclient.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="chitchatclient.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Octokit" Version="11.0.1" />
     <PackageReference Include="Supabase" Version="1.0.1" />
   </ItemGroup>
 
@@ -29,6 +40,14 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Resources\chitchatclient.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="chitchatclient.png" />
   </ItemGroup>
 
 </Project>
