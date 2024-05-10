@@ -9,3 +9,5 @@
 - Changed default workflow to include these notes in release
 
 ## Fixes
+
+- Fixed workflow to checkout the branch before running the release script
