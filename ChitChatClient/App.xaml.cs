@@ -10,9 +10,21 @@ namespace ChitChatClient
 	/// </summary>
 	public partial class App : Application
 	{
-		private void Application_Exit(object sender, ExitEventArgs e)
+		private readonly UserService userService = UserService.Instance;
+
+		protected override void OnExit(ExitEventArgs e)
 		{
-        }
-    }
+			try
+			{
+				Task.Run(() => userService.SetUserOnline(false)).Wait();
+			}
+			catch (Exception)
+			{
+				Console.WriteLine("Error setting user offline");
+			}
+			
+			base.OnExit(e);
+		}
+	}
 
 }

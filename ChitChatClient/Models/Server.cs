@@ -23,12 +23,16 @@ namespace ChitChatClient.Models
 		[Column("created_at")]
 		public DateTime CreatedAt { get; set; }
 
+		[Column("user_count")]
+		public int UserCount { get; set; }
+
 		public Server()
 		{
 			Id = -1;
 			Name = string.Empty;
 			CreatedBy = 0;
 			CreatedAt = DateTime.Now;
+			UserCount = 0;
 		}
 
 		public Server(string name, int createdBy)
@@ -36,6 +40,7 @@ namespace ChitChatClient.Models
 			Name = name;
 			CreatedBy = createdBy;
 			CreatedAt = DateTime.Now;
+			UserCount = 0;
 		}
 
 		public Server(int id, string name, int createdBy, DateTime createdAt)

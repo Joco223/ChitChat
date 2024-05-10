@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ChitChatClient.Windows"
+        xmlns:local="clr-namespace:ChitChatClient.Windows" xmlns:helpers="clr-namespace:ChitChatClient.Helpers"
         mc:Ignorable="d"
-        Title="ChatWindow" Height="450" Width="800"
-        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded">
+        Title="ChitChat" Height="540" Width="1000"
+        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -73,17 +73,48 @@
         <GroupBox Header="Users" Grid.Column="3">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ListView x:Name="userListView" BorderThickness="2" Margin="2" Grid.Row="0" ItemsSource="{Binding CurrentServerUsers}" >
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Username}"></TextBlock>
+                <Grid Margin="2" Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border BorderThickness="2" BorderBrush="Gray" Margin="2" Grid.Column="0">
+                        <TextBlock x:Name="onlineUserCountTB" Text="" Padding="2" HorizontalAlignment="Center" />
+                    </Border>
+                    <Border BorderThickness="2" BorderBrush="Gray" Margin="2" Grid.Column="1">
+                        <TextBlock x:Name="totalUserCountTB" Text="" Padding="2" HorizontalAlignment="Center" />
+                    </Border>
+                </Grid>
+                <ListView x:Name="userListView" BorderThickness="2" Margin="2" Grid.Row="1" ItemsSource="{Binding CurrentServerUsers}" >
+                    <ListView.Resources>
+                        <DataTemplate x:Key="OnlineTemplate">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Ellipse Width="10" Height="10" Margin="0 0 5 0" Fill="Green" />
+                                <TextBlock Text="{Binding Username}"></TextBlock>
+                            </StackPanel>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
+                        
+                        <DataTemplate x:Key="OfflineTemplate">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+                                <Ellipse Width="10" Height="10" Margin="0 0 5 0" Fill="Red" />
+                                <TextBlock Text="{Binding Username}"></TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+
+                        <helpers:UserOnlineDTS x:Key="UserOnlineDTS" OnlineTemplate="{StaticResource OnlineTemplate}" OfflineTemplate="{StaticResource OfflineTemplate}" />
+                    </ListView.Resources>
+
+                    <ListView.ItemTemplateSelector>
+                        <helpers:UserOnlineDTS OnlineTemplate="{StaticResource OnlineTemplate}" OfflineTemplate="{StaticResource OfflineTemplate}" />
+                    </ListView.ItemTemplateSelector>
                 </ListView>
-                <Button x:Name="accountSettingsButton" Content="Account settings" Margin="2" Grid.Row="1" Click="accountSettingsButton_Click" />
+                <TextBox x:Name="userFilterTextBox" Grid.Row="2" Margin="2" />
+                <Button x:Name="accountSettingsButton" Content="Account settings" Margin="2" Grid.Row="3" Click="accountSettingsButton_Click" />
             </Grid>
         </GroupBox>
     </Grid>

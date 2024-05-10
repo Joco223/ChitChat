@@ -13,17 +13,71 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <GroupBox Header="Servers" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
-            <ListView x:Name="serverListView" ItemsSource="{Binding Servers}">
-            </ListView>
+        <GroupBox Header="Servers" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4">
+            <DataGrid x:Name="serverListView" ItemsSource="{Binding Servers}" 
+                      AutoGenerateColumns="False" 
+                      GridLinesVisibility="Horizontal" 
+                      IsReadOnly="True" 
+                      MouseDoubleClick="serverListView_MouseDoubleClick"
+                      CanUserReorderColumns="False"
+                      CanUserResizeColumns="False"
+                      CanUserResizeRows="False"
+                      SelectionMode="Single"
+                      CanUserAddRows="False"
+                      HeadersVisibility="Column"
+                      SelectionUnit="FullRow">
+                
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Joined" Width="Auto" Binding="{Binding JoinedStatus}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                    <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="User count" Width="Auto" Binding="{Binding UserCount}">
+                        <DataGridTextColumn.CellStyle>
+                            <Style TargetType="DataGridCell">
+                                <Setter Property="HorizontalAlignment" Value="Center"/>
+                            </Style>
+                        </DataGridTextColumn.CellStyle>
+                    </DataGridTextColumn>
+                </DataGrid.Columns>
+
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Transparent"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                </DataGrid.Resources>
+
+                <DataGrid.CellStyle>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+                    </Style>
+                </DataGrid.CellStyle>
+
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="LightBlue" />
+                                <Setter Property="Foreground" Value="Black" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.RowStyle>
+            </DataGrid>
         </GroupBox>
         <TextBox x:Name="serverSearchTextBox" Grid.Row="1" Grid.Column="0" Margin="2" TextChanged="serverSearchTextBox_TextChanged" />
         <Button x:Name="joinButton" Grid.Row="1" Grid.Column="1" Content="Join" Margin="2" Padding="5" Click="joinButton_Click"/>
-        <Button x:Name="cancelButton" Grid.Row="1" Grid.Column="2" Content="Cancel" Margin="2" Padding="5" Click="cancelButton_Click"/>
+        <Button x:Name="refreshButton" Grid.Row="1" Grid.Column="2" Content="Refresh" Margin="2" Padding="5" Click="refreshButton_Click"/>
+        <Button x:Name="cancelButton" Grid.Row="1" Grid.Column="3" Content="Cancel" Margin="2" Padding="5" Click="cancelButton_Click"/>
     </Grid>
 </Window>

@@ -105,5 +105,38 @@ namespace ChitChatClient.Services
 
             return -1;
         }
+
+        // Set current user online status
+        public async Task<bool> SetUserOnline(bool status)
+        {
+			try
+            {
+				var user = supabaseHandler.Client.Auth.CurrentUser;
+
+				if (user != null && user.Id != null)
+                {
+
+					var userRequest = await supabaseHandler.Client.From<Models.User>().Where(u => u.Uuid == user.Id).Get();
+					var userResponse = userRequest.Model;
+
+					if (userResponse != null)
+                    {
+						userResponse.IsOnline = status;
+						var response = await supabaseHandler.Client.From<Models.User>().Update(userResponse);
+
+						if (response != null)
+                        {
+							return true;
+						}
+					}
+				}
+			}
+			catch (Exception ex)
+            {
+				Console.WriteLine(ex.Message);
+			}
+
+			return false;
+		}
     }
 }

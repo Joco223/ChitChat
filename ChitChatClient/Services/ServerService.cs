@@ -98,12 +98,14 @@ namespace ChitChatClient.Services
 
                     foreach (var server in servers)
                     {
-                        var serverOption = new ServerOption(server, "No");
+                        var serverOption = new ServerOption(server, false, server.UserCount);
 
                         if (userServerJoins.Any(x => x.ServerId == server.Id))
                         {
-                            serverOption.Joined = "Yes";
+                            serverOption.Joined = true;
                         }
+
+                        serverOption.OnlineUserCount = await GetOnlineUserCount(server.Id);
 
                         serverOptions.Add(serverOption);
                     }
@@ -115,6 +117,17 @@ namespace ChitChatClient.Services
             }
 
             return serverOptions;
+        }
+
+        public async Task<int> GetOnlineUserCount(int serverId)
+        {
+            var userServerJoinRequest = await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.ServerId == serverId).Get();
+            var userServerJoins = userServerJoinRequest.Models;
+
+            var serverUsersRequest = await supabaseHandler.Client.From<User>().Filter(x => x.Id, Supabase.Postgrest.Constants.Operator.In, userServerJoins.Select(x => x.UserId).ToList()).Get();
+            var serverUsers = serverUsersRequest.Models;
+
+            return serverUsers.Where(u => u.IsOnline).Count();
         }
 
         // Get joined servers

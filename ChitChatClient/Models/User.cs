@@ -26,6 +26,9 @@ namespace ChitChatClient.Models
         [Column("uuid")]
         public string Uuid { get; set; }
 
+        [Column("is_online")]
+        public bool IsOnline { get; set; }
+
         public User()
         {
             Id = 0;

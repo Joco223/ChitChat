@@ -9,23 +9,28 @@ namespace ChitChatClient.Models
 	public class ServerOption
 	{
         public Server Server { get; set; }
-        public string Joined { get; set; }
+        public bool Joined { get; set; }
+        public int OnlineUserCount { get; set; }
+        public int TotalUserCount { get; set; }
 
-        public ServerOption(Server server, string joined)
+        public string JoinedStatus => Joined ? "Yes" : "No";
+        public string UserCount => $"{OnlineUserCount} / {TotalUserCount}";
+        public string Name => Server.Name;
+
+        public ServerOption(Server server, bool joined, int userCount)
         {
             Server = server;
             Joined = joined;
+            TotalUserCount = userCount;
+            OnlineUserCount = 0;
         }
 
 		public ServerOption()
 		{
             Server = new();
-            Joined = string.Empty;
+            Joined = false;
+            TotalUserCount = 0;
+            OnlineUserCount = 0;
 		}
-
-        public override string ToString()
-        {
-            return Server.Name + " - " + (Joined == "Yes" ? "Joined" : "Not Joined");
-        }
 	}
 }

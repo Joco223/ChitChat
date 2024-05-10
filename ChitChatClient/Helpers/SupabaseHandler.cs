@@ -9,8 +9,8 @@ namespace ChitChatClient.Helpers
 {
 	public class SupabaseHandler
 	{
-		private string? supabaseUrl = "https://pblidipsxjrfmmousmwh.supabase.co";
-		private string? supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBibGlkaXBzeGpyZm1tb3VzbXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUyMDUxNTcsImV4cCI6MjAzMDc4MTE1N30.PkJ2W98C0Avn6sCdoPXhnVwUnOTLWyfCXXqaoYvliIk";
+		private readonly string supabaseUrl = "https://pblidipsxjrfmmousmwh.supabase.co";
+		private readonly string supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBibGlkaXBzeGpyZm1tb3VzbXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUyMDUxNTcsImV4cCI6MjAzMDc4MTE1N30.PkJ2W98C0Avn6sCdoPXhnVwUnOTLWyfCXXqaoYvliIk";
 
 		private Client localClient;
 

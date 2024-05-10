@@ -36,11 +36,16 @@ namespace ChitChatClient
 			InitializeComponent();
 			DataContext = registerUser;
 
+			// Set version
 			string? version = Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString();
 			versionLabel.Content = $"Version: {version}";
 		}
 
-		private void clearInput()
+
+		/// <summary>
+		/// Clears input fields
+		/// </summary>
+		private void ClearInput()
 		{
 			email.Text = "";
             password.Password = "";
@@ -48,7 +53,10 @@ namespace ChitChatClient
             registerUser.ClearData();
 		}
 
-		private void showLoginForm()
+		/// <summary>
+		/// Hides registration form and shows login form
+		/// </summary>
+		private void ShowLoginForm()
 		{
             usernameLabel.Visibility = Visibility.Collapsed;
             username.Visibility = Visibility.Collapsed;
@@ -57,10 +65,13 @@ namespace ChitChatClient
             cancelRegistrationButton.Visibility = Visibility.Collapsed;
             loginButton.Visibility = Visibility.Visible;
             registerMode = false;
-			clearInput();
+			ClearInput();
         }
 
-		private void showRegistrationForm()
+		/// <summary>
+		/// Shows registration form and hides login form
+		/// </summary>
+		private void ShowRegistrationForm()
 		{
             usernameLabel.Visibility = Visibility.Visible;
             username.Visibility = Visibility.Visible;
@@ -69,7 +80,7 @@ namespace ChitChatClient
             cancelRegistrationButton.Visibility = Visibility.Visible;
             loginButton.Visibility = Visibility.Collapsed;
             registerMode = true;
-            clearInput();
+            ClearInput();
         }
 
 		async private void registerButton_Click(object sender, RoutedEventArgs e)
@@ -100,7 +111,7 @@ namespace ChitChatClient
                         MessageBox.Show("User registered successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                         // Clear form
-                        showLoginForm();
+                        ShowLoginForm();
                     }
                     else
 					{
@@ -115,13 +126,13 @@ namespace ChitChatClient
             else
 			{
                 // Show registration form
-				showRegistrationForm();
+				ShowRegistrationForm();
             }
         }
 
 		private void cancelRegistrationButton_Click(object sender, RoutedEventArgs e)
 		{
-			showLoginForm();
+			ShowLoginForm();
         }
 
 		async private void loginButton_Click(object sender, RoutedEventArgs e)
@@ -140,11 +151,18 @@ namespace ChitChatClient
 
                 if (session != null)
                 {
-                    var chatWindow = new ChatWindow();
-					chatWindow.Show();
-					this.Close();
-					
-					//MessageBox.Show("User logged in successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+					var loginResult = await userService.SetUserOnline(true);
+
+					if (loginResult)
+					{
+						var chatWindow = new ChatWindow();
+						chatWindow.Show();
+						Close();
+					}
+					else
+					{
+						MessageBox.Show("Login failed", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+					}
                 }
             }
 			catch (Exception ex)
