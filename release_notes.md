@@ -1,13 +1,9 @@
 ## New features
 
-- Added icons to client and launcher apps
-- Added icon to title in client app
-- Added "Check for updates" button to client app
+- Check for new version when starting the client and notify the user if a new version is available
 
 ## Changes
 
-- Changed default workflow to include these notes in release
 
 ## Fixes
 
-- Fixed workflow to checkout the branch before running the release script

@@ -163,20 +163,32 @@ namespace ChitChatClient
 			registerUser.ConfirmPassword = confirmPassword.Password;
         }
 
-		private void Window_ContentRendered(object sender, EventArgs e)
+		private async void Window_ContentRendered(object sender, EventArgs e)
 		{
+			// Check for updates
+			await CheckForUpdates();
         }
 
 		private async void checkForUpdatesButton_Click(object sender, RoutedEventArgs e)
+		{
+			await CheckForUpdates(true);
+        }
+
+		/// <summary>
+		/// Checks for updates and notifies the user if there is an update available
+		/// </summary>
+		/// <param name="notify">Should there be a notification where no updates are available</param>
+		/// <returns></returns>
+		private async Task CheckForUpdates(bool notify = false)
 		{
 			if (await updateService.CheckForUpdates())
 			{
 				MessageBox.Show("There is a new version available, run launcher to update", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
 			}
-			else
+			else if (notify)
 			{
 				MessageBox.Show("No updates available", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
 			}
-        }
+		}
     }
 }
