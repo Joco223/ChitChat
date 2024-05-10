@@ -37,6 +37,8 @@ namespace ChitChat
 
 			// Delete old version of app if it exists
 			appInfoService.DeleteOldVersion();
+
+			versionLabel.Content = $"Version: {Properties.Settings.Default["AppVersion"]}";
 		}
 
 		private void clearInput()
