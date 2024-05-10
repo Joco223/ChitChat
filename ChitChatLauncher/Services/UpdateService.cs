@@ -61,16 +61,16 @@ namespace ChitChatLauncher.Services
 				// Assuming the path to the other application's executable
 				string otherAppPath = GetAppPath();
 
-				// Get the assembly from the executable
-				Assembly otherAppAssembly = Assembly.LoadFrom(otherAppPath);
+				var versionInfo = FileVersionInfo.GetVersionInfo(otherAppPath);
 
 				// Get the version information
-				string version = otherAppAssembly.GetName().Version?.ToString() ?? "0.0.0.0";
+				string version = versionInfo.FileVersion ?? "0.0.0.0";
 
 				return new Version(version);
 			}
-			catch (Exception)
+			catch (Exception ex)
 			{
+				Console.WriteLine(ex.Message);
 				return new Version("0.0.0.0");
 			}
 		}

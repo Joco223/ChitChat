@@ -9,6 +9,7 @@
 	<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
 	<RuntimeIdentifier>win-x64</RuntimeIdentifier>
 	<Version>1.1.0</Version>
+	<Platforms>AnyCPU;x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
