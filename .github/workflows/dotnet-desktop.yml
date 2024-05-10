@@ -42,7 +42,7 @@ jobs:
       - uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: "D:/a/ChitChat/ChitChat/ChitChatLauncher/bin/Release/net8.0-windows/win-x64/publish/*.exe"
+          pattern: "D:/a/ChitChat/ChitChat/ChitChatClient/bin/Release/net8.0-windows/win-x64/publish/*.exe"
           release-url: ${{ needs.create-release.outputs.upload_url }}
 
 
@@ -65,5 +65,5 @@ jobs:
       - uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: "D:/a/ChitChat/ChitChat/ChitChatClient/bin/Release/net8.0-windows/win-x64/publish/*.exe"
+          pattern: "D:/a/ChitChat/ChitChat/ChitChatLauncher/bin/Release/net8.0-windows/win-x64/publish/*.exe"
           release-url: ${{ needs.create-release.outputs.upload_url }}
