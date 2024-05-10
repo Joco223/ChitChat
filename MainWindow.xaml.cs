@@ -174,7 +174,17 @@ namespace ChitChat
 				if (!latest)
 				{
                     MessageBox.Show("New version available. Click OK to update.", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
-					await appInfoService.CheckForLatestVersion();
+					//await appInfoService.UpdateApp();
+
+					downloadProgressLabel.Visibility = Visibility.Visible;
+					downloadProgressBar.Visibility = Visibility.Visible;
+
+					loginButton.IsEnabled = false;
+					registerButton.IsEnabled = false;
+					email.IsEnabled = false;
+					password.IsEnabled = false;
+
+					await appInfoService.UpdateApp(UpdateDownloadProgressBar);
 				}
 			}
 			catch (Exception ex)
@@ -184,5 +194,12 @@ namespace ChitChat
 				Application.Current.Shutdown();
 			}
         }
+
+		private void UpdateDownloadProgressBar(float progressPercentage)
+		{
+			downloadProgressLabel.Content = "Downloading: " + Math.Round(progressPercentage) + "%";
+			Console.WriteLine(progressPercentage);
+			downloadProgressBar.Value = progressPercentage;
+		}
     }
 }

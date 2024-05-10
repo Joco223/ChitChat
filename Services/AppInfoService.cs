@@ -65,25 +65,47 @@ namespace ChitChat.Services
         }
 
 		// Downloads the latest version of the app
-		private async Task DownloadLatestVersion()
+		private async Task DownloadLatestVersion(Action<float>? progressCallback = null)
 		{
-            using (var client = new HttpClient())
-            {
-                string url = "https://www.example.com/file-to-download.txt";
+            string url = "https://github.com/Joco223/ChitChat//releases/latest/download/ChitChat.exe";
+            string savePath = "ChitChat_new.exe";
 
-                var response = await client.GetByteArrayAsync(url);
-                File.WriteAllBytes("ChitChat.exe", response);
-            }
-        }
+			using HttpClient client = new();
+
+			using HttpResponseMessage response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
+
+			response.EnsureSuccessStatusCode();
+
+			using Stream contentStream = await response.Content.ReadAsStreamAsync();
+
+			long totalBytes = response.Content.Headers.ContentLength ?? -1;
+			long totalRead = 0;
+			byte[] buffer = new byte[8192];
+			int read;
+
+			using FileStream fileStream = new(savePath, FileMode.Create, FileAccess.Write, FileShare.None);
+			while ((read = await contentStream.ReadAsync(buffer)) > 0)
+			{
+				await fileStream.WriteAsync(buffer.AsMemory(0, read));
+				totalRead += read;
+
+				if (totalBytes > 0)
+				{
+					float percentage = ((float)totalRead / totalBytes) * 100;
+
+					progressCallback?.Invoke(percentage);
+				}
+			}
+		}
 
         // Updates the app
-        public async Task UpdateApp()
+        public async Task UpdateApp(Action<float>? progressCallback = null)
         {
             File.Move("ChitChat.exe", "ChitChat_old.exe");
 			File.SetAttributes("ChitChat_old.exe", File.GetAttributes("ChitChat_old.exe") | FileAttributes.Hidden);
-			await DownloadLatestVersion();
+			await DownloadLatestVersion(progressCallback);
 
-            System.Diagnostics.Process.Start("ChitChat.exe");
+            System.Diagnostics.Process.Start("ChitChat_new.exe");
             Application.Current.Shutdown();
         }
 
@@ -94,6 +116,11 @@ namespace ChitChat.Services
             {
                 File.Delete("ChitChat_old.exe");
             }
+
+			if (File.Exists("ChitChat_new.exe"))
+			{
+				File.Move("ChitChat_new.exe", "ChitChat.exe");
+			}
         }
 	}
 }
