@@ -22,14 +22,6 @@ namespace ChitChatClient.Helpers
 
         private SupabaseHandler()
 		{
-			supabaseUrl = Properties.Settings.Default["supabaseUrl"].ToString();
-			supabaseKey = Properties.Settings.Default["supabaseKey"].ToString();
-
-			if (string.IsNullOrEmpty(supabaseUrl) || string.IsNullOrEmpty(supabaseKey))
-			{
-                throw new Exception("Supabase URL and Key must be set in the application settings");
-            }
-
 			// Initialize Supabase client
 			localClient = new Client(supabaseUrl, supabaseKey);
             localClient.InitializeAsync().Wait();

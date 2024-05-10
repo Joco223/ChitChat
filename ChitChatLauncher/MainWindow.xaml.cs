@@ -27,16 +27,25 @@ namespace ChitChatLauncher
 
 		private async void Window_Loaded(object sender, RoutedEventArgs e)
 		{
-			bool updated = await updateService.UpdateApp(UpdateDownloadProgressBar);
+			try
+			{
+				bool updated = await updateService.UpdateApp(UpdateDownloadProgressBar);
 
-			System.Diagnostics.Process.Start(updateService.GetAppPath());
-			Application.Current.Shutdown();
+				System.Diagnostics.Process.Start(updateService.GetAppPath());
+				Application.Current.Shutdown();
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				throw;
+			}
 		}
 
 		private void UpdateDownloadProgressBar(float progressPercentage)
 		{
 			downloadProgressLabel.Content = "Downloading: " + Math.Round(progressPercentage) + "%";
 			downloadProgressBar.Value = progressPercentage;
+			downloadProgressBar.Visibility = Visibility.Visible;
 		}
 	}
 }

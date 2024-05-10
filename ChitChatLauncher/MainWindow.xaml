@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChitChatLauncher"
         mc:Ignorable="d"
-        Title="ChitChat Launcher" Height="224" Width="400"
+        Title="ChitChat Launcher" Height="100" Width="300"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded">
     <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-        <Label Name="downloadProgressLabel" Content="Checking for updates..." FontSize="20" HorizontalContentAlignment="Center" Visibility="Visible"/>
-        <ProgressBar x:Name="downloadProgressBar" Maximum="100" Minimum="0" Height="5" Width="250" Visibility="Collapsed" />
+        <Label Name="downloadProgressLabel" Content="Checking for updates..." FontSize="16" HorizontalContentAlignment="Center" Visibility="Visible"/>
+        <ProgressBar x:Name="downloadProgressBar" Maximum="100" Minimum="0" Height="8" Width="250" Visibility="Collapsed" />
     </StackPanel>
 </Window>

@@ -51,21 +51,28 @@ namespace ChitChatLauncher.Services
 
 		public string GetAppPath()
 		{
-			return Path.Combine(GetAppDirectory(), "ChitChat.exe");
+			return Path.Combine(GetAppDirectory(), "ChitChatClient.exe");
 		}
 
 		public Version GetCurrentVersion()
 		{
-			// Assuming the path to the other application's executable
-			string otherAppPath = Path.Combine(GetAppDirectory(), "ChitChat.exe");
+			try
+			{
+				// Assuming the path to the other application's executable
+				string otherAppPath = GetAppPath();
 
-			// Get the assembly from the executable
-			Assembly otherAppAssembly = Assembly.LoadFrom(otherAppPath);
+				// Get the assembly from the executable
+				Assembly otherAppAssembly = Assembly.LoadFrom(otherAppPath);
 
-			// Get the version information
-			string version = otherAppAssembly.GetName().Version?.ToString() ?? "0.0.0.0";
+				// Get the version information
+				string version = otherAppAssembly.GetName().Version?.ToString() ?? "0.0.0.0";
 
-			return new Version(version);
+				return new Version(version);
+			}
+			catch (Exception)
+			{
+				return new Version("0.0.0.0");
+			}
 		}
 
 		public async Task<Version> GetLatestVersion()
@@ -90,7 +97,7 @@ namespace ChitChatLauncher.Services
 		private string GetAppDirectory()
 		{
 			var roamingDirectory = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			return Path.Combine(roamingDirectory, "ChitChat/");
+			return Path.Combine(roamingDirectory, "ChitChat\\");
 		}
 
 		void EnsureFolder(string path)
@@ -106,7 +113,7 @@ namespace ChitChatLauncher.Services
 		// Downloads the latest version of the app
 		private async Task DownloadLatestVersion(string savePath, Action<float>? progressCallback = null)
 		{
-			string url = "https://github.com/Joco223/ChitChat/releases/latest/download/ChitChat.exe";
+			string url = "https://github.com/Joco223/ChitChat/releases/latest/download/ChitChatClient.exe";
 
 			using HttpClient client = new();
 
