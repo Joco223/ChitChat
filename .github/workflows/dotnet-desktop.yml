@@ -6,11 +6,11 @@ on:
       - "**"
 
 env:
-  PROJECT_PATH: ChitChatClient.csproj
-  LAUNCHER_PATH: ChitChatLauncher.csproj
+  PROJECT_PATH: ChitChatClient/ChitChatClient.csproj
+  LAUNCHER_PATH: ChitChatLauncher/ChitChatLauncher.csproj
 
 jobs:
-  deploy:
+  deploy-client:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,6 +24,30 @@ jobs:
       - run: dotnet build ${{ env.PROJECT_PATH }} -c Release --no-restore -p:PublishSingleFile=true --self-contained -r win-x64
 
       - run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build
+ 
+
+      - uses: actions/create-release@v1
+        id: create_release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+
+      - uses: csexton/release-asset-action@v2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: "D:/a/ChitChat/ChitChatClient/bin/Release/net8.0-windows/win-x64/publish/*.exe"
+          release-url: ${{ steps.create_release.outputs.upload_url }}
+
+  deploy-launcher:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0
   
       - run: dotnet restore ${{ env.LAUNCHER_PATH }} -r win-x64
 
@@ -42,5 +66,5 @@ jobs:
       - uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: "D:/a/ChitChat/ChitChat/bin/Release/net8.0-windows/win-x64/publish/*.exe"
+          pattern: "D:/a/ChitChat/ChitChatLauncher/bin/Release/net8.0-windows/win-x64/publish/*.exe"
           release-url: ${{ steps.create_release.outputs.upload_url }}
