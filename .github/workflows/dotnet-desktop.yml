@@ -17,10 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Get changelog
-        id: get_changelog
-        run: echo "release_notes=$(cat release_notes.md)" >> $GITHUB_OUTPUT
-
       - uses: actions/create-release@v1
         id: create_release
         env:
@@ -28,12 +24,14 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
-          body: ${{ steps.get_changelog.outputs.release_notes }}
+          body_path: release_notes.md
 
   deploy-client:
     runs-on: windows-latest
     needs: create-release
     steps:
+      - uses: actions/checkout@v4
+
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0
@@ -55,6 +53,8 @@ jobs:
     runs-on: windows-latest
     needs: create-release
     steps:
+      - uses: actions/checkout@v4
+    
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0
