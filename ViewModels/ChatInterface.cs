@@ -1,12 +1,12 @@
-﻿using ChitChat.Models;
-using ChitChat.Services;
+﻿using ChitChatClient.Models;
+using ChitChatClient.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChitChat.ViewModels
+namespace ChitChatClient.ViewModels
 {
 	public class ChatInterface
 	{

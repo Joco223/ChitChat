@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChitChat.ViewModels
+namespace ChitChatClient.ViewModels
 {
 	public class CreateServer
 	{

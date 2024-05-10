@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChitChat.Models
+namespace ChitChatClient.Models
 {
 	[Table("Servers")]
 	public class Server : BaseModel

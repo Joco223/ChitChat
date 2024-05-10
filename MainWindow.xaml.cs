@@ -1,8 +1,9 @@
-﻿using ChitChat.Helpers;
-using ChitChat.Services;
-using ChitChat.ViewModels;
-using ChitChat.Windows;
+﻿using ChitChatClient.Helpers;
+using ChitChatClient.Services;
+using ChitChatClient.ViewModels;
+using ChitChatClient.Windows;
 using Supabase.Gotrue;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ChitChat
+namespace ChitChatClient
 {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -25,7 +26,6 @@ namespace ChitChat
 
 		private readonly UserService userService = UserService.Instance;
 		private readonly SupabaseHandler supabaseHandler = SupabaseHandler.Instance;
-		private readonly AppInfoService appInfoService = AppInfoService.Instance;
 
 		public RegisterUser registerUser = new();
 
@@ -35,10 +35,8 @@ namespace ChitChat
 			InitializeComponent();
 			DataContext = registerUser;
 
-			// Delete old version of app if it exists
-			appInfoService.DeleteOldVersion();
-
-			versionLabel.Content = $"Version: {Properties.Settings.Default["AppVersion"]}";
+			string? version = Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString();
+			versionLabel.Content = $"Version: {version}";
 		}
 
 		private void clearInput()
@@ -141,7 +139,6 @@ namespace ChitChat
 
                 if (session != null)
                 {
-					// Implement redirect to Servers window
                     var chatWindow = new ChatWindow();
 					chatWindow.Show();
 					this.Close();
@@ -165,41 +162,9 @@ namespace ChitChat
 			registerUser.ConfirmPassword = confirmPassword.Password;
         }
 
-		private async void Window_ContentRendered(object sender, EventArgs e)
+		private void Window_ContentRendered(object sender, EventArgs e)
 		{
-			try
-			{
-				bool latest = await appInfoService.CheckForLatestVersion();
-
-				if (!latest)
-				{
-                    MessageBox.Show("New version available. Click OK to update.", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
-					//await appInfoService.UpdateApp();
-
-					downloadProgressLabel.Visibility = Visibility.Visible;
-					downloadProgressBar.Visibility = Visibility.Visible;
-
-					loginButton.IsEnabled = false;
-					registerButton.IsEnabled = false;
-					email.IsEnabled = false;
-					password.IsEnabled = false;
-
-					await appInfoService.UpdateApp(UpdateDownloadProgressBar);
-				}
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-				// Exit the app
-				Application.Current.Shutdown();
-			}
         }
 
-		private void UpdateDownloadProgressBar(float progressPercentage)
-		{
-			downloadProgressLabel.Content = "Downloading: " + Math.Round(progressPercentage) + "%";
-			Console.WriteLine(progressPercentage);
-			downloadProgressBar.Value = progressPercentage;
-		}
     }
 }

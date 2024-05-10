@@ -1,12 +1,12 @@
-﻿using ChitChat.Helpers;
-using ChitChat.Models;
+﻿using ChitChatClient.Helpers;
+using ChitChatClient.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChitChat.Services
+namespace ChitChatClient.Services
 {
 	public class ServerService
 	{

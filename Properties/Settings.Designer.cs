@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ChitChat.Properties {
+namespace ChitChatClient.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -20,35 +20,6 @@ namespace ChitChat.Properties {
         public static Settings Default {
             get {
                 return defaultInstance;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("https://pblidipsxjrfmmousmwh.supabase.co")]
-        public string supabaseURL {
-            get {
-                return ((string)(this["supabaseURL"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBibGlkaXBz" +
-            "eGpyZm1tb3VzbXdoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTUyMDUxNTcsImV4cCI6MjAzMDc4MTE1" +
-            "N30.PkJ2W98C0Avn6sCdoPXhnVwUnOTLWyfCXXqaoYvliIk")]
-        public string supabaseKey {
-            get {
-                return ((string)(this["supabaseKey"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("v1.4.3-alpha")]
-        public string AppVersion {
-            get {
-                return ((string)(this["AppVersion"]));
             }
         }
     }

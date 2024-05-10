@@ -1,5 +1,5 @@
-﻿using ChitChat.Services;
-using ChitChat.ViewModels;
+﻿using ChitChatClient.Services;
+using ChitChatClient.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace ChitChat.Windows
+namespace ChitChatClient.Windows
 {
 	/// <summary>
 	/// Interaction logic for CreateServerWindow.xaml

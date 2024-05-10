@@ -1,5 +1,5 @@
-﻿using ChitChat.Models;
-using ChitChat.Services;
+﻿using ChitChatClient.Models;
+using ChitChatClient.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace ChitChat.ViewModels
+namespace ChitChatClient.ViewModels
 {
 
 	public class ServerList

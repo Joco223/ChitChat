@@ -1,6 +1,6 @@
-﻿using ChitChat.Helpers;
-using ChitChat.Models;
-using ChitChat.ViewModels;
+﻿using ChitChatClient.Helpers;
+using ChitChatClient.Models;
+using ChitChatClient.ViewModels;
 using Supabase.Gotrue;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChitChat.Services
+namespace ChitChatClient.Services
 {
 	public class UserService
 	{

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ChitChat.Models
+namespace ChitChatClient.Models
 {
 	public class ServerOption
 	{
