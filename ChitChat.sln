@@ -7,6 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChatClient", "ChitChatC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChatLauncher", "ChitChatLauncher\ChitChatLauncher.csproj", "{63148D4B-8CAC-4F0A-A97B-7134DCE6AFAD}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3299120F-0A20-4769-88C1-42A8248E74B5}"
+	ProjectSection(SolutionItems) = preProject
+		release_notes.md = release_notes.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
