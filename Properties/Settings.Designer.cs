@@ -45,7 +45,7 @@ namespace ChitChat.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("v1.4.2-alpha")]
+        [global::System.Configuration.DefaultSettingValueAttribute("v1.4.3-alpha")]
         public string AppVersion {
             get {
                 return ((string)(this["AppVersion"]));

@@ -67,7 +67,7 @@ namespace ChitChat.Services
 		// Downloads the latest version of the app
 		private async Task DownloadLatestVersion(Action<float>? progressCallback = null)
 		{
-            string url = "https://github.com/Joco223/ChitChat//releases/latest/download/ChitChat.exe";
+            string url = "https://github.com/Joco223/ChitChat/releases/latest/download/ChitChat.exe";
             string savePath = "ChitChat_new.exe";
 
 			using HttpClient client = new();
@@ -116,11 +116,15 @@ namespace ChitChat.Services
             {
                 File.Delete("ChitChat_old.exe");
             }
+        }
 
-			if (File.Exists("ChitChat_new.exe"))
+		// Rename new copy to ChitChat.exe
+		public void RenameNewVersion()
+		{
+            if (File.Exists("ChitChat_new.exe"))
 			{
-				File.Move("ChitChat_new.exe", "ChitChat.exe");
-			}
+                File.Move("ChitChat_new.exe", "ChitChat.exe");
+            }
         }
 	}
 }
