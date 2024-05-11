@@ -41,9 +41,9 @@ namespace ChitChatLauncher
 			}
 		}
 
-		private void UpdateDownloadProgressBar(float progressPercentage)
+		private void UpdateDownloadProgressBar(float progressPercentage, string fileName)
 		{
-			downloadProgressLabel.Content = "Downloading: " + Math.Round(progressPercentage) + "%";
+			downloadProgressLabel.Content = "Downloading: " + fileName + " - " + Math.Round(progressPercentage) + "%";
 			downloadProgressBar.Value = progressPercentage;
 			downloadProgressBar.Visibility = Visibility.Visible;
 		}

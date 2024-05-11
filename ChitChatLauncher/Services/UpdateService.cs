@@ -21,26 +21,35 @@ namespace ChitChatLauncher.Services
 		{
 		}
 
-		public async Task<bool> UpdateApp(Action<float>? progressCallback = null)
+		public async Task<bool> UpdateApp(Action<float, string>? progressCallback = null)
 		{
+			string appName = "ChitChatClient.exe";
+			string hashesName = "hashes.txt";
+
 			string appPath = GetAppPath();
+			string hashehPath = Path.Combine(GetAppDirectory(), hashesName);
+			
 			EnsureFolder(appPath);
 
 			// Check if app exists
 			if (!File.Exists(appPath))
 			{
-				await DownloadLatestVersion(appPath, progressCallback);
+				await DownloadAsset(appPath, appName, progressCallback);
 				return true;
 			}
 			else
 			{
+				// Check app checksum sha256
+
+				await DownloadAsset(appPath, appName, progressCallback);
+
 				Version currentVersion = GetCurrentVersion();
 				Version latestVersion = await GetLatestVersion();
 
 				if (latestVersion > currentVersion)
 				{
 					File.Delete(appPath);
-					await DownloadLatestVersion(appPath, progressCallback);
+					await DownloadAsset(appPath, appName, progressCallback);
 					return true;
 				}
 			}
@@ -111,9 +120,10 @@ namespace ChitChatLauncher.Services
 		}
 
 		// Downloads the latest version of the app
-		private async Task DownloadLatestVersion(string savePath, Action<float>? progressCallback = null)
+		private async Task DownloadAsset(string savePath, string fileName, Action<float, string>? progressCallback = null)
 		{
-			string url = "https://github.com/Joco223/ChitChat/releases/latest/download/ChitChatClient.exe";
+			string urlBase = "https://github.com/Joco223/ChitChat/releases/latest/download/";
+			string url = urlBase + fileName;
 
 			using HttpClient client = new();
 
@@ -125,7 +135,7 @@ namespace ChitChatLauncher.Services
 
 			long totalBytes = response.Content.Headers.ContentLength ?? -1;
 			long totalRead = 0;
-			byte[] buffer = new byte[8192];
+			byte[] buffer = new byte[5 * 1024 * 1204]; // 5 MB Buffer
 			int read;
 
 			using FileStream fileStream = new(savePath, System.IO.FileMode.Create, FileAccess.Write, FileShare.None);

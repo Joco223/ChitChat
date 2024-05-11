@@ -14,11 +14,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="chitchatclient.png" />
+    <None Remove="Resources\chitchatclient.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="chitchatlauncher.ico" />
+    <Content Include="Resources\chitchatclient.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Octokit" Version="11.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="chitchatclient.png" />
   </ItemGroup>
 
 </Project>

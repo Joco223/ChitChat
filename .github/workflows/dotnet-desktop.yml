@@ -70,3 +70,16 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           pattern: "D:/a/ChitChat/ChitChat/ChitChatLauncher/bin/Release/net8.0-windows/win-x64/publish/*.exe"
           release-url: ${{ needs.create-release.outputs.upload_url }}
+
+  generate-checksum:
+    runs-on: windows-latest
+    needs: [deploy-client, deploy-launcher]
+    steps:
+      - uses: MCJack123/ghaction-generate-release-hashes@v3
+        with:
+          hash-type: sha1
+          file-name: hashes.txt
+      - uses: actions/upload-artifact@v2
+        with:
+          name: Asset Hashes
+          path: hashes.txt
