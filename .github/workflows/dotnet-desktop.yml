@@ -44,7 +44,7 @@ jobs:
 
       - run: dotnet publish ${{ env.PROJECT_PATH }} -c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build
   
-      - run: sha256sum D:/a/ChitChat/ChitChat/ChitChatClient/bin/Release/net8.0-windows/win-x64/publish/*.exe > sha256sum D:/a/ChitChat/ChitChat/ChitChatClient/bin/Release/net8.0-windows/win-x64/publish/ChitChatClientSHA256.txt
+      - run: sha256sum D:/a/ChitChat/ChitChat/ChitChatClient/bin/Release/net8.0-windows/win-x64/publish/*.exe > ChitChatClientSHA256.txt
   
       - uses: csexton/release-asset-action@v2
         with:
@@ -55,7 +55,7 @@ jobs:
       - uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: "D:/a/ChitChat/ChitChat/ChitChatClient/bin/Release/net8.0-windows/win-x64/publish/*.txt"
+          pattern: "ChitChatClientSHA256.txt"
           release-url: ${{ needs.create-release.outputs.upload_url }}
 
 
@@ -75,7 +75,7 @@ jobs:
 
       - run: dotnet publish ${{ env.LAUNCHER_PATH }} -c Release --self-contained -r win-x64 -p:PublishSingleFile=true --no-build
   
-      - run: sha256sum D:/a/ChitChat/ChitChat/ChitChatLauncher/bin/Release/net8.0-windows/win-x64/publish/*.exe > D:/a/ChitChat/ChitChat/ChitChatLauncher/bin/Release/net8.0-windows/win-x64/publish/ChitChatLauncherSHA256.txt
+      - run: sha256sum D:/a/ChitChat/ChitChat/ChitChatLauncher/bin/Release/net8.0-windows/win-x64/publish/*.exe > ChitChatLauncherSHA256.txt
   
       - uses: csexton/release-asset-action@v2
         with:
@@ -86,7 +86,7 @@ jobs:
       - uses: csexton/release-asset-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          pattern: "D:/a/ChitChat/ChitChat/ChitChatLauncher/bin/Release/net8.0-windows/win-x64/publish/*.txt"
+          pattern: "ChitChatLauncherSHA256.txt"
           release-url: ${{ needs.create-release.outputs.upload_url }}
 
   publish-release:
