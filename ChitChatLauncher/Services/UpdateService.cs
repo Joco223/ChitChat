@@ -148,7 +148,7 @@ namespace ChitChatLauncher.Services
 				{
 					float percentage = ((float)totalRead / totalBytes) * 100;
 
-					progressCallback?.Invoke(percentage);
+					progressCallback?.Invoke(percentage, fileName);
 				}
 			}
 		}
