@@ -13,6 +13,7 @@ jobs:
   create-release:
     runs-on: windows-latest
     outputs:
+      release_id: ${{ steps.create_release.outputs.id }}
       upload_url: ${{ steps.create_release.outputs.upload_url }}
     steps:
       - uses: actions/checkout@v4
@@ -25,6 +26,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: ${{ github.ref }}
           body_path: release_notes.md
+          draft: true
 
   deploy-client:
     runs-on: windows-latest
@@ -71,15 +73,12 @@ jobs:
           pattern: "D:/a/ChitChat/ChitChat/ChitChatLauncher/bin/Release/net8.0-windows/win-x64/publish/*.exe"
           release-url: ${{ needs.create-release.outputs.upload_url }}
 
-  generate-checksum:
+  publish-release:
     runs-on: windows-latest
-    needs: [deploy-client, deploy-launcher]
+    needs: [create-release, deploy-client, deploy-launcher]
     steps:
-      - uses: MCJack123/ghaction-generate-release-hashes@v3
+      - uses: eregon/publish-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          hash-type: sha1
-          file-name: hashes.txt
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Asset Hashes
-          path: hashes.txt
+          release_id: ${{ needs.create-release.outputs.release_id }}
