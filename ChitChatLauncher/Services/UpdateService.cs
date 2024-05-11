@@ -1,4 +1,5 @@
-﻿using Octokit;
+﻿using ChitChatLauncher.Helpers;
+using Octokit;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -21,34 +22,35 @@ namespace ChitChatLauncher.Services
 		{
 		}
 
-		public async Task<bool> UpdateApp(Action<float, string>? progressCallback = null)
+		public async Task<bool> UpdateApp(Action<float, string>? progressCallback = null, Action<string>? notificationUpdate = null)
 		{
 			string appName = "ChitChatClient.exe";
-			string hashesName = "hashes.txt";
+			string clientHashName = "ChitChatClientSHA256.txt";
 
 			string appPath = GetAppPath();
-			string hashehPath = Path.Combine(GetAppDirectory(), hashesName);
+			string clientHashPath = Path.Combine(GetAppDirectory(), clientHashName);
 			
 			EnsureFolder(appPath);
 
 			// Check if app exists
 			if (!File.Exists(appPath))
 			{
+				notificationUpdate?.Invoke("Downloading new version - ");
 				await DownloadAsset(appPath, appName, progressCallback);
 				return true;
 			}
 			else
 			{
 				// Check app checksum sha256
+				await DownloadAsset(clientHashPath, clientHashName, null);
 
-				await DownloadAsset(appPath, appName, progressCallback);
+				string clientHash = GeneratorSHA256.ReadSHA256FromFile(clientHashPath);
+				string currentClientHash = GeneratorSHA256.GenerateSHA256FromFile(appPath);
 
-				Version currentVersion = GetCurrentVersion();
-				Version latestVersion = await GetLatestVersion();
-
-				if (latestVersion > currentVersion)
+				if (clientHash != currentClientHash)
 				{
 					File.Delete(appPath);
+					notificationUpdate?.Invoke("Downloading new version...");
 					await DownloadAsset(appPath, appName, progressCallback);
 					return true;
 				}
@@ -61,46 +63,6 @@ namespace ChitChatLauncher.Services
 		public string GetAppPath()
 		{
 			return Path.Combine(GetAppDirectory(), "ChitChatClient.exe");
-		}
-
-		public Version GetCurrentVersion()
-		{
-			try
-			{
-				// Assuming the path to the other application's executable
-				string otherAppPath = GetAppPath();
-
-				var versionInfo = FileVersionInfo.GetVersionInfo(otherAppPath);
-
-				// Get the version information
-				string version = versionInfo.FileVersion ?? "0.0.0.0";
-
-				return new Version(version);
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.Message);
-				return new Version("0.0.0.0");
-			}
-		}
-
-		public async Task<Version> GetLatestVersion()
-		{
-			var client = new GitHubClient(new ProductHeaderValue("ChitChat"));
-
-			var releases = await client.Repository.Release.GetAll("Joco223", "ChitChat");
-
-			if (releases.Count > 0)
-			{
-				var latestRelease = releases[0];
-				string tagName = latestRelease.TagName;
-
-				return new Version(tagName);
-			}
-			else
-			{
-				return new Version("0.0.0.0");
-			}
 		}
 
 		private string GetAppDirectory()
@@ -148,7 +110,7 @@ namespace ChitChatLauncher.Services
 				{
 					float percentage = ((float)totalRead / totalBytes) * 100;
 
-					progressCallback?.Invoke(percentage, fileName);
+					progressCallback?.Invoke(percentage, fileName[..fileName.IndexOf('.')]);
 				}
 			}
 		}

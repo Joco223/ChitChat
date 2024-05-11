@@ -29,7 +29,7 @@ namespace ChitChatLauncher
 		{
 			try
 			{
-				bool updated = await updateService.UpdateApp(UpdateDownloadProgressBar);
+				bool updated = await updateService.UpdateApp(UpdateDownloadProgressBar, UpdateNotification);
 
 				System.Diagnostics.Process.Start(updateService.GetAppPath());
 				Application.Current.Shutdown();
@@ -41,11 +41,17 @@ namespace ChitChatLauncher
 			}
 		}
 
+		private void UpdateNotification(string notification)
+		{
+			downloadProgressLabel.Content = notification;
+		}
+
 		private void UpdateDownloadProgressBar(float progressPercentage, string fileName)
 		{
-			downloadProgressLabel.Content = "Downloading: " + fileName + " - " + Math.Round(progressPercentage) + "%";
+			downloadProgressPercentLabel.Content = Math.Round(progressPercentage) + "%";
 			downloadProgressBar.Value = progressPercentage;
 			downloadProgressBar.Visibility = Visibility.Visible;
+			downloadProgressPercentLabel.Visibility = Visibility.Visible;
 		}
 	}
 }
