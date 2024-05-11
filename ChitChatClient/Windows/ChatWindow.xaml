@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:ChitChatClient.Windows" xmlns:helpers="clr-namespace:ChitChatClient.Helpers"
         mc:Ignorable="d"
         Title="ChitChat" Height="540" Width="1000"
-        WindowStartupLocation="CenterScreen" Loaded="Window_Loaded" Closing="Window_Closing">
+        WindowStartupLocation="CenterOwner" Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid Margin="5">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
@@ -20,6 +20,7 @@
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <ListView x:Name="serverListView" BorderThickness="2" Margin="2" Grid.Row="0" SelectionMode="Single" ItemsSource="{Binding Servers}" SelectionChanged="serverListView_SelectionChanged">
                     <ListView.ItemTemplate>
@@ -28,7 +29,8 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Grid Grid.Row="1">
+                <TextBox x:Name="filterServerTextBox" Grid.Row="1" Margin="2" TextChanged="filterServerTextBox_TextChanged" />
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
@@ -36,7 +38,7 @@
                     <Button x:Name="addServerButton" Content="Join" Margin="2" Grid.Column="0" Click="addServerButton_Click" />
                     <Button x:Name="removeServerButton" Content="Leave" Margin="2" Grid.Column="1" IsEnabled="False" Click="removeServerButton_Click" />
                 </Grid>
-                <Button x:Name="createServerButton" Content="Create server" Margin="2" Grid.Row="2" Click="createServerButton_Click" />
+                <Button x:Name="createServerButton" Content="Create server" Margin="2" Grid.Row="3" Click="createServerButton_Click" />
             </Grid>
         </GroupBox>
         <GroupBox Header="Channels" Grid.Column="1">
@@ -113,7 +115,7 @@
                         <helpers:UserOnlineDTS OnlineTemplate="{StaticResource OnlineTemplate}" OfflineTemplate="{StaticResource OfflineTemplate}" />
                     </ListView.ItemTemplateSelector>
                 </ListView>
-                <TextBox x:Name="userFilterTextBox" Grid.Row="2" Margin="2" />
+                <TextBox x:Name="userFilterTextBox" Grid.Row="2" Margin="2" TextChanged="userFilterTextBox_TextChanged" />
                 <Button x:Name="accountSettingsButton" Content="Account settings" Margin="2" Grid.Row="3" Click="accountSettingsButton_Click" />
             </Grid>
         </GroupBox>

@@ -19,6 +19,12 @@ namespace ChitChatClient.Services
 
 		private UserService() { }
 
+
+        /// <summary>
+        /// Registers a new user
+        /// </summary>
+        /// <param name="registerUser">RegisterUser object with all necessary data</param>
+        /// <returns></returns>
 		public async Task<bool> RegisterUser(RegisterUser registerUser)
 		{
             if (registerUser.PasswordsMatch())
@@ -54,13 +60,23 @@ namespace ChitChatClient.Services
             return false;
         }
 
-        // Get users in a server
-        public async Task<List<Models.User>> GetServerUsers(int serverId)
+        /// <summary>
+        /// Gets all users in a server
+        /// </summary>
+        /// <param name="server">Server from which to get users</param>
+        /// <returns></returns>
+        public async Task<List<Models.User>> GetServerUsers(Server? server)
         {
             List<Models.User> users = [];
+
+            if (server == null)
+            {
+				return users;
+			}
+
 			try
 			{
-                var usjRequest = await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.ServerId == serverId).Get();
+                var usjRequest = await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.ServerId == server.Id).Get();
                 var usjList = usjRequest.Models;
                 var usersId = usjList.Select(usj => usj.UserId).ToList();
 
@@ -80,7 +96,10 @@ namespace ChitChatClient.Services
             return users;
         }
 
-        // Get current user id
+        /// <summary>
+        /// Gets id of currently logged in user
+        /// </summary>
+        /// <returns></returns>
         public async Task<int> GetUserId()
         {
             try
@@ -106,7 +125,11 @@ namespace ChitChatClient.Services
             return -1;
         }
 
-        // Set current user online status
+        /// <summary>
+        /// Sets the online status of the currently logged in user
+        /// </summary>
+        /// <param name="status">True or false for online status</param>
+        /// <returns></returns>
         public async Task<bool> SetUserOnline(bool status)
         {
 			try

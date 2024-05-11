@@ -15,7 +15,7 @@ namespace ChitChatClient.Helpers
 		public DataTemplate? OnlineTemplate { get; set; }
 		public DataTemplate? OfflineTemplate { get; set; }
 
-		public override DataTemplate SelectTemplate(object item, DependencyObject container)
+		public override DataTemplate? SelectTemplate(object item, DependencyObject container)
 		{
 			// Add your condition here to select the appropriate template
 			if (item is User yourObject)

@@ -91,7 +91,7 @@ namespace ChitChatClient.Windows
 			}
 			else
 			{
-				bool result = await serverService.JoinServer(selectedServer.Id);
+				bool result = await serverService.JoinServer(selectedServer);
 
 				if (result)
 				{
@@ -132,7 +132,7 @@ namespace ChitChatClient.Windows
 		}
 
 		// Helper method to find the DataGridColumnHeader at a given position
-		private T? FindVisualParent<T>(DependencyObject child) where T : DependencyObject
+		private T? FindVisualParent<T>(DependencyObject? child) where T : DependencyObject
 		{
 			DependencyObject parentObject = VisualTreeHelper.GetParent(child);
 

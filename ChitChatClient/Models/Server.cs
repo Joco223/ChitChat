@@ -26,6 +26,9 @@ namespace ChitChatClient.Models
 		[Column("user_count")]
 		public int UserCount { get; set; }
 
+		[Column("online_user_count")]
+		public int OnlineUserCount { get; set; }
+
 		public Server()
 		{
 			Id = -1;

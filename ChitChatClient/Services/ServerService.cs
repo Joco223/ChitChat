@@ -19,7 +19,11 @@ namespace ChitChatClient.Services
 
 		public ServerService() { }
 
-        // Create a server
+        /// <summary>
+        /// Creates a new server and automatically joins the server
+        /// </summary>
+        /// <param name="name">Name of the new server</param>
+        /// <returns></returns>
 		public async Task<bool> CreateServer(string name)
 		{
             try
@@ -39,7 +43,7 @@ namespace ChitChatClient.Services
                     if (response != null && server != null)
 					{
                         // Join the server
-                        var userServerJoin = await JoinServer(server.Id);
+                        var userServerJoin = await JoinServer(server);
 
                         if (userServerJoin)
                         {
@@ -60,7 +64,10 @@ namespace ChitChatClient.Services
             return false;
         }
 
-        // Get all Servers
+        /// <summary>
+        /// Gets all servers in database
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Server>> GetServers()
         {
 			List<Server> servers = [];
@@ -78,7 +85,11 @@ namespace ChitChatClient.Services
             return servers;
         }
 
-        // Get all servers with data if user is joined
+        /// <summary>
+        /// Gets all servers with additional information:
+        /// Is user joined, server name, online user count, total user count
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<ServerOption>> GetServerOptions()
         {
             List<ServerOption> serverOptions = [];
@@ -105,7 +116,7 @@ namespace ChitChatClient.Services
                             serverOption.Joined = true;
                         }
 
-                        serverOption.OnlineUserCount = await GetOnlineUserCount(server.Id);
+                        serverOption.OnlineUserCount = await GetOnlineUserCount(server);
 
                         serverOptions.Add(serverOption);
                     }
@@ -119,18 +130,26 @@ namespace ChitChatClient.Services
             return serverOptions;
         }
 
-        public async Task<int> GetOnlineUserCount(int serverId)
+        /// <summary>
+        /// Gets online user count in a server
+        /// </summary>
+        /// <param name="server"></param>
+        /// <returns></returns>
+        public async Task<int> GetOnlineUserCount(Server server)
         {
-            var userServerJoinRequest = await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.ServerId == serverId).Get();
+            var userServerJoinRequest = await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.ServerId == server.Id).Get();
             var userServerJoins = userServerJoinRequest.Models;
 
             var serverUsersRequest = await supabaseHandler.Client.From<User>().Filter(x => x.Id, Supabase.Postgrest.Constants.Operator.In, userServerJoins.Select(x => x.UserId).ToList()).Get();
             var serverUsers = serverUsersRequest.Models;
 
-            return serverUsers.Where(u => u.IsOnline).Count();
+           return serverUsers.Where(u => u.IsOnline).Count();
         }
 
-        // Get joined servers
+        /// <summary>
+        /// Gets all servers current user has joined
+        /// </summary>
+        /// <returns></returns>
         public async Task<List<Server>> GetJoinedServers()
         {
             List<Server> servers = [];
@@ -163,24 +182,43 @@ namespace ChitChatClient.Services
             return servers;
         }
 
-        // Join a server
-        public async Task<bool> JoinServer(int serverId)
+        /// <summary>
+        /// Joins the new server
+        /// </summary>
+        /// <param name="server">Server to join</param>
+        /// <returns>True if sucess, false if not</returns>
+        public async Task<bool> JoinServer(Server? server)
         {
             try
             {
+                if (server == null)
+                {
+                    return false;
+				}
+
                 var user = supabaseHandler.Client.Auth.CurrentUser;
 
                 if (user != null && user.Id != null)
                 {
                     var userId = await userService.GetUserId();
 
-                    var userServerJoin = new UserServerJoin(userId, serverId);
+                    var userServerJoin = new UserServerJoin(userId, server.Id);
 
                     var response = await supabaseHandler.Client.From<UserServerJoin>().Insert(userServerJoin);
 
                     if (response != null)
                     {
-                        return true;
+                        var serverRequest = await supabaseHandler.Client.From<Server>().Where(s => s.Id == server.Id).Get();
+                        var joinedServer = serverRequest.Model;
+
+                        if (joinedServer != null)
+                        {
+							joinedServer.UserCount += 1;
+
+							await supabaseHandler.Client.From<Server>().Update(joinedServer);
+                            
+                            return true;
+						}
                     }
                 }
             }
@@ -192,20 +230,39 @@ namespace ChitChatClient.Services
             return false;
         }
 
-        // Leave a server
-        public async Task<bool> LeaveServer(int serverId)
+        /// <summary>
+        /// Remove current user from server
+        /// </summary>
+        /// <param name="server">Server to leave</param>
+        /// <returns></returns>
+        public async Task<bool> LeaveServer(Server? server)
         {
             try
             {
+                if (server == null)
+                {
+					return false;
+				}
+
                 Supabase.Gotrue.User? user = supabaseHandler.Client.Auth.CurrentUser;
 
                 if (user != null && user.Id != null)
                 {
                     var userId = await userService.GetUserId();
 
-                    await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.UserId == userId && usj.ServerId == serverId).Delete();
+                    await supabaseHandler.Client.From<UserServerJoin>().Where(usj => usj.UserId == userId && usj.ServerId == server.Id).Delete();
 
-                    return true;
+					var serverRequest = await supabaseHandler.Client.From<Server>().Where(s => s.Id == server.Id).Get();
+					var joinedServer = serverRequest.Model;
+
+					if (joinedServer != null)
+					{
+						joinedServer.UserCount -= 1;
+
+						await supabaseHandler.Client.From<Server>().Update(joinedServer);
+
+						return true;
+					}
                 }
             }
             catch (Exception ex)

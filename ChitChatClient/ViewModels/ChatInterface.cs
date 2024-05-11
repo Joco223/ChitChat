@@ -1,10 +1,12 @@
-﻿using ChitChatClient.Models;
+﻿using ChitChatClient.Helpers;
+using ChitChatClient.Models;
 using ChitChatClient.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace ChitChatClient.ViewModels
 {
@@ -30,18 +32,45 @@ namespace ChitChatClient.ViewModels
         }
 
 		// Leave a server
-		public async Task<bool> LeaveServer(int serverId)
+		public async Task<bool> LeaveServer(Server? server)
 		{
-            return await serverService.LeaveServer(serverId);
+			if (server == null)
+			{
+				return false;
+			}
+            return await serverService.LeaveServer(server);
         }
 
 		// Get users in a server
-		public async Task GetServerUsers(int serverId)
+		public async Task GetServerUsers(Server? server)
 		{
-			if (serverId != -1)
+			if (server != null)
 			{
-				CurrentServerUsers = await userService.GetServerUsers(serverId);
+				CurrentServerUsers = await userService.GetServerUsers(server);
+				CurrentServerUsers.Sort(new OnlineUserComparer());
 			}
         }
+
+		public async Task RefreshJoinedServers(Action refreshServerListView)
+		{
+			// Get all joined servers
+			await GetServers();
+
+			refreshServerListView.Invoke();
+
+		}
+
+		public async Task RefreshServerUsers(Action<int?, int?> refreshUserListView, Server? selectedServer)
+		{
+			if (selectedServer == null)
+			{
+				return;
+			}
+
+			await GetServerUsers(selectedServer);
+			selectedServer.OnlineUserCount = await serverService.GetOnlineUserCount(selectedServer);
+
+			refreshUserListView.Invoke(selectedServer.OnlineUserCount, selectedServer.UserCount);
+		}
 	}
 }

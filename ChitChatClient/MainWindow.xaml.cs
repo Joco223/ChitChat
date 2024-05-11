@@ -94,13 +94,6 @@ namespace ChitChatClient
                     return;
                 }
 
-                // Check if email is valid
-				// Implement regex check if email is valid
-				//if (!registerUser.IsEmailValid())
-				//{
-
-				//}
-
                 // Register user
 				if (registerUser.PasswordsMatch())
 				{
