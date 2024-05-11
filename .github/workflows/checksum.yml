@@ -9,6 +9,8 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: MCJack123/ghaction-generate-release-hashes@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT }}
         with:
           hash-type: sha1
           file-name: hashes.txt
