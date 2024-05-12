@@ -39,8 +39,9 @@
                 </StackPanel>
                 <CheckBox x:Name="isPublic" Grid.Row="2" Content="Is server private" Margin="0 10 0 0" />
                 <StackPanel Grid.Row="4" HorizontalAlignment="Stretch">
-                    <Button x:Name="saveServerButton" Content="Save server settings" Margin="0 0 0 5"/>
+                    <Button x:Name="viewWordFilterButton" Content="View word filters" Margin="0 0 0 5" />
                     <Button x:Name="viewServerInvitesButton" Content="View server invites" Margin="0 0 0 5"/>
+                    <Button x:Name="saveServerButton" Content="Save server settings" Margin="0 0 0 5"/>
                     <Button x:Name="deleteServerButton" Content="Delete server" />
                 </StackPanel>
             </Grid>
