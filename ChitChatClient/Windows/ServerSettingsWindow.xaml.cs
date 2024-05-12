@@ -1,4 +1,6 @@
 ﻿using ChitChatClient.Helpers;
+using ChitChatClient.Models;
+using ChitChatClient.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,13 +22,28 @@ namespace ChitChatClient.Windows
 	/// </summary>
 	public partial class ServerSettingsWindow : Window
 	{
+		private readonly ServerService serverService = ServerService.Instance;
+		private Server currentServer;
+
+		public Server CurrentServer { get => currentServer; set => currentServer = value; }
+
 		public ServerSettingsWindow()
 		{
 			InitializeComponent();
+			currentServer = new();
+
+		}
+
+		public ServerSettingsWindow(Server server) : base()
+		{
+			InitializeComponent();
+			DataContext = this;
 
 			// Set placeholders
 			PlaceholderProperty.SetPlaceholderText(filterChannelList);
 			PlaceholderProperty.SetPlaceholderText(filterRoleList);
+
+			currentServer = server;
 		}
 
 		private void filterChannelList_GotFocus(object sender, RoutedEventArgs e)
@@ -48,5 +65,10 @@ namespace ChitChatClient.Windows
 		{
 			PlaceholderProperty.SetPlaceholderText(filterRoleList);
         }
-    }
+
+		private async void saveServerButton_Click(object sender, RoutedEventArgs e)
+		{
+			await serverService.UpdateServer(CurrentServer);
+		}
+	}
 }

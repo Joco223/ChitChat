@@ -2,6 +2,7 @@
 using ChitChatClient.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +25,7 @@ namespace ChitChatClient.Services
         /// </summary>
         /// <param name="name">Name of the new server</param>
         /// <returns></returns>
-		public async Task<bool> CreateServer(string name)
+		public async Task<bool> CreateServer(string name, string description)
 		{
             try
 			{
@@ -34,7 +35,7 @@ namespace ChitChatClient.Services
 				{
                     var userId = await userService.GetUserId();
 
-                    var server = new Server(name, userId);
+                    var server = new Server(name, userId, description);
 
                     var response = await supabaseHandler.Client.From<Server>().Insert(server);
 
@@ -58,7 +59,7 @@ namespace ChitChatClient.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return false;
@@ -79,7 +80,7 @@ namespace ChitChatClient.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return servers;
@@ -124,7 +125,7 @@ namespace ChitChatClient.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return serverOptions;
@@ -176,7 +177,7 @@ namespace ChitChatClient.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return servers;
@@ -224,7 +225,7 @@ namespace ChitChatClient.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return false;
@@ -267,10 +268,63 @@ namespace ChitChatClient.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return false;
         }
+
+		/// <summary>
+		/// Checks if the current user is the owner of the server
+		/// </summary>
+		/// <param name="server">Server to check for</param>
+		/// <returns>True if logged in user is the owner, false if not</returns>
+		public async Task<bool> IsServerOwner(Server server)
+        {
+			try
+            {
+				var user = supabaseHandler.Client.Auth.CurrentUser;
+
+				if (user != null && user.Id != null)
+                {
+					var userId = await userService.GetUserId();
+
+					if (userId == server.CreatedBy)
+                    {
+						return true;
+					}
+				}
+			}
+			catch (Exception ex)
+            {
+				Debug.WriteLine(ex.Message);
+			}
+
+			return false;
+		}
+
+        /// <summary>
+        /// Update server information
+        /// </summary>
+        /// <param name="server">Server to update</param>
+        /// <returns>True if update succesful, false if not</returns>
+        public async Task<bool> UpdateServer(Server server)
+        {
+			try
+            {
+				var response = await supabaseHandler.Client.From<Server>().Update(server);
+
+				if (response != null)
+                {
+					return true;
+				}
+			}
+			catch (Exception ex)
+            {
+				Debug.WriteLine(ex.Message);
+			}
+
+			return false;
+		}
 	}
 }

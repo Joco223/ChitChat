@@ -1,6 +1,7 @@
 ﻿using ChitChatClient.Services;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Windows;
 
 namespace ChitChatClient
@@ -20,7 +21,7 @@ namespace ChitChatClient
 			}
 			catch (Exception)
 			{
-				Console.WriteLine("Error setting user offline");
+				Debug.WriteLine("Error setting user offline");
 			}
 			
 			base.OnExit(e);

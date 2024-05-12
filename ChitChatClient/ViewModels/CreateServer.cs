@@ -9,9 +9,13 @@ namespace ChitChatClient.ViewModels
 	public class CreateServer
 	{
 		public string Name { get; set; }
+
+		public string Description { get; set; }
+
 		public CreateServer()
 		{
 			Name = string.Empty;
+			Description = string.Empty;
         }
 	}
 }

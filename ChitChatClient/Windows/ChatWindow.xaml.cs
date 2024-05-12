@@ -179,9 +179,22 @@ namespace ChitChatClient.Windows
 
         }
 
-        private void serverSettingsButton_Click(object sender, RoutedEventArgs e)
+        private async void serverSettingsButton_Click(object sender, RoutedEventArgs e)
 		{
-			ServerSettingsWindow serverSettingsWindow = new();
+			if (SelectedServer == null)
+			{
+				MessageBox.Show("No server selected", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return;
+			}
+
+			// Check if current user is the server owner
+			if (!await serverService.IsServerOwner(SelectedServer))
+			{
+				MessageBox.Show("You are not the server owner", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+				return;
+			}
+
+			ServerSettingsWindow serverSettingsWindow = new(SelectedServer);
 			serverSettingsWindow.ShowDialog();
         }
 
@@ -202,8 +215,22 @@ namespace ChitChatClient.Windows
 
 		private async void serverListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
+			if (SelectedServer == null)
+			{
+				return;
+			}
+
 			await chatInterface.RefreshServerUsers(RefreshUserListView, SelectedServer);
 			await RefreshServerChannels();
+
+			if (await serverService.IsServerOwner(SelectedServer))
+			{
+				serverSettingsButton.IsEnabled = true;
+			}
+			else
+			{
+				serverSettingsButton.IsEnabled = false;
+			}
 		}
 
 		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

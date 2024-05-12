@@ -13,8 +13,6 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -23,7 +21,9 @@
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Content="Server Name:"/>
                 <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Path=Name}"/>
-                <Grid Grid.Row="4" Grid.ColumnSpan="2">
+                <Label Grid.Row="1" Grid.Column="0" Content="Server Description:"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Path=Description}" TextWrapping="WrapWithOverflow"/>
+                <Grid Grid.Row="2" Grid.ColumnSpan="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>

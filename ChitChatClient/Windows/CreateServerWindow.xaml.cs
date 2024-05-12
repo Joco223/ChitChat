@@ -33,9 +33,9 @@ namespace ChitChatClient.Windows
 
 		async private void createServerButton_Click(object sender, RoutedEventArgs e)
 		{
-			if (!string.IsNullOrEmpty(CreateServer.Name))
+			if (!string.IsNullOrEmpty(CreateServer.Name) && !string.IsNullOrEmpty(CreateServer.Description))
 			{
-				bool result = await serverService.CreateServer(CreateServer.Name);
+				bool result = await serverService.CreateServer(CreateServer.Name, CreateServer.Description);
 
 				if (result)
 				{

@@ -4,6 +4,7 @@ using ChitChatClient.ViewModels;
 using Supabase.Gotrue;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,7 +54,7 @@ namespace ChitChatClient.Services
                 }
                 catch (Exception ex)
 				{
-                    Console.WriteLine(ex.Message);
+                    Debug.WriteLine(ex.Message);
                 }
             }
 
@@ -89,7 +90,7 @@ namespace ChitChatClient.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
                 throw;
             }
 
@@ -119,7 +120,7 @@ namespace ChitChatClient.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Debug.WriteLine(ex.Message);
             }
 
             return -1;
@@ -156,7 +157,7 @@ namespace ChitChatClient.Services
 			}
 			catch (Exception ex)
             {
-				Console.WriteLine(ex.Message);
+				Debug.WriteLine(ex.Message);
 			}
 
 			return false;
