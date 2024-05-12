@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ChitChatClient.Windows"
+        xmlns:local="clr-namespace:ChitChatClient.Windows" xmlns:helpers="clr-namespace:ChitChatClient.Helpers"
         mc:Ignorable="d"
         Title="ChitChat - Server settings" Height="450" Width="800">
     <Grid Margin="5">
@@ -21,8 +21,8 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
@@ -33,11 +33,9 @@
                     <TextBlock Text="Server name" Grid.Row="0" HorizontalAlignment="Center" />
                     <TextBox x:Name="serverName" Grid.Row="1" />
                 </Grid>
-                <StackPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="0 10 0 0">
-                    <TextBlock Text="Server description" HorizontalAlignment="Center" />
-                    <TextBox x:Name="serverDescription" Height="200" />
-                </StackPanel>
-                <CheckBox x:Name="isPublic" Grid.Row="2" Content="Is server private" Margin="0 10 0 0" />
+                <TextBlock Text="Server description" HorizontalAlignment="Center" Grid.Row="1" Margin="0 10 0 0" />
+                <TextBox x:Name="serverDescription" Grid.Row="2" />
+                <CheckBox x:Name="isPublic" Grid.Row="3" Content="Is server private" Margin="0 5 0 5" />
                 <StackPanel Grid.Row="4" HorizontalAlignment="Stretch">
                     <Button x:Name="viewWordFilterButton" Content="View word filters" Margin="0 0 0 5" />
                     <Button x:Name="viewServerInvitesButton" Content="View server invites" Margin="0 0 0 5"/>
@@ -54,7 +52,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <ListView x:Name="channelsList" Grid.Row="0" />
-                <TextBox x:Name="filterChannelList" Grid.Row="1" Margin="0 5 0 0" />
+                <TextBox x:Name="filterChannelList" Grid.Row="1" Margin="0 5 0 0" helpers:PlaceholderProperty.Placeholder="Filter channels..." GotFocus="filterChannelList_GotFocus" LostFocus="filterChannelList_LostFocus" />
                 <Grid Grid.Row="2" HorizontalAlignment="Stretch" Margin="0 5 0 0" >
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -100,7 +98,7 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <ListView x:Name="roleListBox" Grid.Row="0" />
-                <TextBox x:Name="filterRoleList" Grid.Row="1" Margin="0 5 0 0" />
+                <TextBox x:Name="filterRoleList" Grid.Row="1" Margin="0 5 0 0" helpers:PlaceholderProperty.Placeholder="Filter roles..." GotFocus="filterRoleList_GotFocus" LostFocus="filterRoleList_LostFocus" />
                 <Grid Grid.Row="2" HorizontalAlignment="Stretch" Margin="0 5 0 0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
