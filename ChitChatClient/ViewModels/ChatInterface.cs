@@ -14,15 +14,19 @@ namespace ChitChatClient.ViewModels
 	{
 		private static readonly ServerService serverService = ServerService.Instance;
 		private static readonly UserService userService = UserService.Instance;
+		private static readonly ChannelService channelService = ChannelService.Instance;
 
 		public List<Server> Servers { get; set; }
 
 		public List<User> CurrentServerUsers { get; set; }
 
+		public List<Channel> CurrentServerChannels { get; set; }
+
 		public ChatInterface()
 		{
 			Servers = [];
 			CurrentServerUsers = [];
+			CurrentServerChannels = [];
         }
 
 		// Get joined servers
@@ -50,6 +54,15 @@ namespace ChitChatClient.ViewModels
 				CurrentServerUsers.Sort(new OnlineUserComparer());
 			}
         }
+
+		// Gets channels in the currently selected server
+		public async Task GetServerChannels(Server? server)
+		{
+			if (server != null)
+			{
+				CurrentServerChannels = await channelService.GetChannels(server);
+			}
+		}
 
 		public async Task RefreshJoinedServers(Action refreshServerListView)
 		{

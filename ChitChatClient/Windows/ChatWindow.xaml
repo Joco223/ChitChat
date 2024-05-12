@@ -29,7 +29,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <TextBox x:Name="filterServerTextBox" Grid.Row="1" Margin="2" TextChanged="filterServerTextBox_TextChanged" />
+                <TextBox x:Name="filterServerTextBox" Grid.Row="1" Margin="2" TextChanged="filterServerTextBox_TextChanged" GotFocus="filterServerTextBox_GotFocus" LostFocus="filterServerTextBox_LostFocus" helpers:PlaceholderProperty.Placeholder="Search servers..." />
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -48,7 +48,13 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ListView x:Name="channelListView" BorderThickness="2" Margin="2" Grid.Row="0" SelectionMode="Single" />
+                <ListView x:Name="channelListView" BorderThickness="2" Margin="2" Grid.Row="0" SelectionMode="Single" ItemsSource="{Binding CurrentServerChannels}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"></TextBlock>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
                 <Button x:Name="serverInfoButton" Content="Server info" Margin="2" Grid.Row="1" Click="serverInfoButton_Click" />
                 <Button x:Name="serverSettingsButton" Content="Server settings" Margin="2" Grid.Row="2" Click="serverSettingsButton_Click" />
             </Grid>
@@ -56,17 +62,23 @@
         <GroupBox Header="Chat" Grid.Column="2">
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
-                <ListView x:Name="chatListView" BorderThickness="2" Margin="2" Grid.Row="0" />
-                <Grid Grid.Row="1">
+                <StackPanel HorizontalAlignment="Stretch" Grid.Row="0" Orientation="Horizontal">
+                    <TextBlock x:Name="currentChannelLabel" FontWeight="Bold" />
+                    <TextBlock Text=" - " />
+                    <TextBlock x:Name="currentChannelDescriptionLabel" />
+                </StackPanel>
+                <ListView x:Name="chatListView" BorderThickness="2" Margin="2" Grid.Row="1" />
+                <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="messageTextBox" BorderThickness="2" Margin="2" Grid.Column="0" />
+                    <TextBox x:Name="messageTextBox" BorderThickness="2" Margin="2" Grid.Column="0" helpers:PlaceholderProperty.Placeholder="Send message..." GotFocus="messageTextBox_GotFocus" LostFocus="messageTextBox_LostFocus" />
                     <Button x:Name="sendButton" Content="Send" Margin="2" Grid.Column="1" Click="sendButton_Click" />
                     <Button x:Name="attachButton" Content="Attach..." Margin="2" Grid.Column="2" Click="attachButton_Click" />
                 </Grid>
@@ -115,7 +127,7 @@
                         <helpers:UserOnlineDTS OnlineTemplate="{StaticResource OnlineTemplate}" OfflineTemplate="{StaticResource OfflineTemplate}" />
                     </ListView.ItemTemplateSelector>
                 </ListView>
-                <TextBox x:Name="userFilterTextBox" Grid.Row="2" Margin="2" TextChanged="userFilterTextBox_TextChanged" />
+                <TextBox x:Name="userFilterTextBox" Grid.Row="2" Margin="2" TextChanged="userFilterTextBox_TextChanged" GotFocus="userFilterTextBox_GotFocus" LostFocus="userFilterTextBox_LostFocus" helpers:PlaceholderProperty.Placeholder="Search users..."  />
                 <Button x:Name="accountSettingsButton" Content="Account settings" Margin="2" Grid.Row="3" Click="accountSettingsButton_Click" />
             </Grid>
         </GroupBox>
