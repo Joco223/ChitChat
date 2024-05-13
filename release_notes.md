@@ -7,6 +7,8 @@
 	- It will update if previous update failed
 - Implemented a server settings window
 - Implemented placeholders for filter fields
+- Added server descriptions
+- Added ability to change server name and description
 
 ## Changes
 

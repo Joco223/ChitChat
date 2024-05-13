@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ChitChatClient.Windows" xmlns:helpers="clr-namespace:ChitChatClient.Helpers"
+        xmlns:local="clr-namespace:ChitChatClient.Windows" xmlns:helpers="clr-namespace:ChitChatClient.Helpers" xmlns:controls="clr-namespace:ChitChatClient.Controls"
         mc:Ignorable="d"
         Title="ChitChat" Height="540" Width="1000"
         WindowStartupLocation="CenterOwner" Loaded="Window_Loaded" Closing="Window_Closing">
@@ -29,7 +29,7 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <TextBox x:Name="filterServerTextBox" Grid.Row="1" Margin="2" TextChanged="filterServerTextBox_TextChanged" GotFocus="filterServerTextBox_GotFocus" LostFocus="filterServerTextBox_LostFocus" helpers:PlaceholderProperty.Placeholder="Search servers..." />
+                <controls:PlaceholderTextBox x:Name="filterServerTextBox" Grid.Row="1" Margin="2" TextChanged="filterServerTextBox_TextChanged" Placeholder="Search servers..." />
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -78,7 +78,7 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="messageTextBox" BorderThickness="2" Margin="2" Grid.Column="0" helpers:PlaceholderProperty.Placeholder="Send message..." GotFocus="messageTextBox_GotFocus" LostFocus="messageTextBox_LostFocus" />
+                    <controls:PlaceholderTextBox x:Name="messageTextBox" BorderThickness="2" Margin="2" Grid.Column="0" Placeholder="Send message..." />
                     <Button x:Name="sendButton" Content="Send" Margin="2" Grid.Column="1" Click="sendButton_Click" />
                     <Button x:Name="attachButton" Content="Attach..." Margin="2" Grid.Column="2" Click="attachButton_Click" />
                 </Grid>
@@ -127,7 +127,7 @@
                         <helpers:UserOnlineDTS OnlineTemplate="{StaticResource OnlineTemplate}" OfflineTemplate="{StaticResource OfflineTemplate}" />
                     </ListView.ItemTemplateSelector>
                 </ListView>
-                <TextBox x:Name="userFilterTextBox" Grid.Row="2" Margin="2" TextChanged="userFilterTextBox_TextChanged" GotFocus="userFilterTextBox_GotFocus" LostFocus="userFilterTextBox_LostFocus" helpers:PlaceholderProperty.Placeholder="Search users..."  />
+                <controls:PlaceholderTextBox x:Name="userFilterTextBox" Grid.Row="2" Margin="2" TextChanged="userFilterTextBox_TextChanged" Placeholder="Search users..."  />
                 <Button x:Name="accountSettingsButton" Content="Account settings" Margin="2" Grid.Row="3" Click="accountSettingsButton_Click" />
             </Grid>
         </GroupBox>

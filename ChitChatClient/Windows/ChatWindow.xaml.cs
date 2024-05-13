@@ -74,11 +74,6 @@ namespace ChitChatClient.Windows
 			userRefreshTimer.Tick += new EventHandler(RefreshServerUsersTask);
 			userRefreshTimer.Interval = new TimeSpan(0, 0, 5);
 			userRefreshTimer.Start();
-
-			// Set placeholders
-			PlaceholderProperty.SetPlaceholderText(userFilterTextBox);
-			PlaceholderProperty.SetPlaceholderText(filterServerTextBox);
-			PlaceholderProperty.SetPlaceholderText(messageTextBox);
 		}
 
 		private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -262,7 +257,7 @@ namespace ChitChatClient.Windows
 			}
 
 			// If the text is the placeholder, return true
-			if (userFilterTextBox.Text == PlaceholderProperty.GetPlaceholder(userFilterTextBox))
+			if (userFilterTextBox.Text == userFilterTextBox.Placeholder)
 			{
 				return true;
 			}
@@ -286,7 +281,7 @@ namespace ChitChatClient.Windows
 			}
 
 			// If the text is the placeholder, return true
-			if (filterServerTextBox.Text == PlaceholderProperty.GetPlaceholder(filterServerTextBox))
+			if (filterServerTextBox.Text == filterServerTextBox.Placeholder)
 			{
 				return true;
 			}
@@ -300,36 +295,6 @@ namespace ChitChatClient.Windows
 			}
 
 			return false;
-		}
-
-		private void userFilterTextBox_GotFocus(object sender, RoutedEventArgs e)
-		{
-			PlaceholderProperty.ClearPlaceholderText(userFilterTextBox);
-		}
-
-		private void userFilterTextBox_LostFocus(object sender, RoutedEventArgs e)
-		{
-			PlaceholderProperty.SetPlaceholderText(userFilterTextBox);
-		}
-
-		private void filterServerTextBox_GotFocus(object sender, RoutedEventArgs e)
-		{
-			PlaceholderProperty.ClearPlaceholderText(filterServerTextBox);
-		}
-
-		private void filterServerTextBox_LostFocus(object sender, RoutedEventArgs e)
-		{
-			PlaceholderProperty.SetPlaceholderText(filterServerTextBox);
-		}
-
-		private void messageTextBox_GotFocus(object sender, RoutedEventArgs e)
-		{
-			PlaceholderProperty.ClearPlaceholderText(messageTextBox);
-		}
-
-		private void messageTextBox_LostFocus(object sender, RoutedEventArgs e)
-		{
-			PlaceholderProperty.SetPlaceholderText(messageTextBox);
 		}
 	}
 }
