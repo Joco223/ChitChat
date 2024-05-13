@@ -34,16 +34,18 @@ namespace ChitChatClient.Windows
 
 		private async Task RefreshServers()
 		{
-            await serverList.GetServerOptions();
-            serverListView.GetBindingExpression(ListView.ItemsSourceProperty).UpdateTarget();
-            serverListView.SelectedIndex = -1;
-        }
+			await serverList.GetServerOptions();
+			serverListView.GetBindingExpression(ListView.ItemsSourceProperty).UpdateTarget();
+			serverListView.SelectedIndex = -1;
+		}
 
 		// Filter servers
 		private void serverSearchTextBox_TextChanged(object sender, TextChangedEventArgs e)
 		{
-			CollectionViewSource.GetDefaultView(serverListView.ItemsSource).Refresh();
-        }
+			if (serverListView.ItemsSource != null) {
+				CollectionViewSource.GetDefaultView(serverListView.ItemsSource).Refresh();
+			}
+		}
 
 		private bool FilterServer(object obj)
 		{
@@ -52,27 +54,31 @@ namespace ChitChatClient.Windows
 				return true;
 			}
 
+			if (serverSearchTextBox.Text == serverSearchTextBox.Placeholder) {
+				return true;
+			}
+
 			if (obj is ServerOption serverOption)
 			{
 				if (serverOption.Server.Name.ToLower().Contains(serverSearchTextBox.Text.ToLower()))
 				{
-                    return true;
-                }
-            }
+					return true;
+				}
+			}
 
-            return false;
+			return false;
 		}
 
 		private async void Window_Loaded(object sender, RoutedEventArgs e)
 		{
 			await RefreshServers();
-            CollectionViewSource.GetDefaultView(serverListView.ItemsSource).Filter = FilterServer;
-        }
+			CollectionViewSource.GetDefaultView(serverListView.ItemsSource).Filter = FilterServer;
+		}
 
 		private void cancelButton_Click(object sender, RoutedEventArgs e)
 		{
 			Close();
-        }
+		}
 
 		private async Task JoinServer()
 		{
@@ -108,12 +114,12 @@ namespace ChitChatClient.Windows
 		private async void joinButton_Click(object sender, RoutedEventArgs e)
 		{
 			await JoinServer();
-        }
+		}
 
 		private async void refreshButton_Click(object sender, RoutedEventArgs e)
 		{
 			await RefreshServers();
-        }
+		}
 
 		private async void serverListView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
 		{
@@ -143,6 +149,28 @@ namespace ChitChatClient.Windows
 				return parent;
 
 			return FindVisualParent<T>(parentObject);
+		}
+
+		private void Expander_Expanded(object sender, RoutedEventArgs e)
+		{
+			for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual) {
+				if (vis is DataGridRow row)
+				{
+					row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+					break;
+				}
+			}
+		}
+
+		private void Expander_Collapsed(object sender, RoutedEventArgs e)
+		{
+			for (var vis = sender as Visual; vis != null; vis = VisualTreeHelper.GetParent(vis) as Visual) {
+				if (vis is DataGridRow row)
+				{
+					row.DetailsVisibility = row.DetailsVisibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
+					break;
+				}
+			}
 		}
 	}
 }
