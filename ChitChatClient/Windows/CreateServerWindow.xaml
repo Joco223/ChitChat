@@ -20,9 +20,9 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Label Grid.Row="0" Grid.Column="0" Content="Server Name:"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Path=Name}"/>
+                <TextBox x:Name="serverNameTextBox" Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Path=Name}" TextChanged="serverNameTextBox_TextChanged" />
                 <Label Grid.Row="1" Grid.Column="0" Content="Server Description:"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Path=Description}" TextWrapping="WrapWithOverflow"/>
+                <TextBox x:Name="serverDescriptionTextBox" Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Path=Description}" TextWrapping="WrapWithOverflow" TextChanged="serverDescriptionTextBox_TextChanged"/>
                 <Grid Grid.Row="2" Grid.ColumnSpan="2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>

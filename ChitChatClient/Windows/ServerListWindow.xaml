@@ -25,6 +25,7 @@
                       GridLinesVisibility="Horizontal" 
                       IsReadOnly="True" 
                       MouseDoubleClick="serverListView_MouseDoubleClick"
+                      SelectionChanged="serverListView_SelectionChanged"
                       CanUserReorderColumns="False"
                       CanUserResizeColumns="False"
                       CanUserResizeRows="False"

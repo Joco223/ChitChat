@@ -1,50 +1,46 @@
-﻿using Octokit;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
-namespace ChitChatClient.Services
-{
-	public class UpdateService
-	{
-		private static readonly UpdateService instance = new();
+using Octokit;
 
-		public static UpdateService Instance { get => instance; }
+using Serilog;
 
-		public UpdateService()
-		{
-		}
+namespace ChitChatClient.Services {
+	/// <summary>
+	/// Service to check for updates
+	/// </summary>
+	public class UpdateService {
+		public UpdateService() { }
 
-		public async Task<bool> CheckForUpdates()
-		{
+		/// <summary>
+		/// Check for updates
+		/// </summary>
+		/// <returns>Returns true if there is a new update</returns>
+		public static async Task<bool> CheckForUpdates() {
 			Version currentVersion = GetCurrentVersion();
 			Version latestVersion = await GetLatestVersion();
 
 			return latestVersion > currentVersion;
 		}
 
-		private Version GetCurrentVersion()
-		{
-			return new Version(Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? "0.0.0.0");
-		}
+		/// <summary>
+		/// Get the current version of the application
+		/// </summary>
+		/// <returns>Returns current version object</returns>
+		public static Version GetCurrentVersion() => new(Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? "0.0.0.0");
 
-		private async Task<Version> GetLatestVersion()
-		{
-			try
-			{
+		/// <summary>
+		/// Get the latest version of the application from GitHub
+		/// </summary>
+		/// <returns>Returns latest version object</returns>
+		private static async Task<Version> GetLatestVersion() {
+			try {
 				GitHubClient client = new(new ProductHeaderValue("ChitChat"));
 				Release latestRelease = await client.Repository.Release.GetLatest("Joco223", "ChitChat");
 
 				return new Version(latestRelease.TagName);
-			}
-			catch (Exception ex)
-			{
-				Debug.WriteLine(ex.Message);
-				return new Version(0, 0, 0, 0);
+			} catch (Exception ex) {
+				Log.Error($"Failed to get latest version from GitHub: {ex.Message}");
+				throw;
 			}
 		}
 	}

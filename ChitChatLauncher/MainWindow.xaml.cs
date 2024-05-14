@@ -1,53 +1,35 @@
-﻿using ChitChatLauncher.Services;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
 
-namespace ChitChatLauncher
-{
+using ChitChatLauncher.Services;
+
+namespace ChitChatLauncher {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window
-	{
+	public partial class MainWindow : Window {
 
 		private readonly UpdateService updateService = UpdateService.Instance;
 
-		public MainWindow()
-		{
+		public MainWindow() {
 			InitializeComponent();
 		}
 
-		private async void Window_Loaded(object sender, RoutedEventArgs e)
-		{
-			try
-			{
-				bool updated = await updateService.UpdateApp(UpdateDownloadProgressBar, UpdateNotification);
+		private async void Window_Loaded(object sender, RoutedEventArgs e) {
+			try {
+				await updateService.UpdateApp(UpdateDownloadProgressBar, UpdateNotification);
 
 				System.Diagnostics.Process.Start(updateService.GetAppPath());
 				Application.Current.Shutdown();
-			}
-			catch (Exception ex)
-			{
+			} catch (Exception ex) {
 				MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-				throw;
 			}
 		}
 
-		private void UpdateNotification(string notification)
-		{
+		private void UpdateNotification(string notification) {
 			downloadProgressLabel.Content = notification;
 		}
 
-		private void UpdateDownloadProgressBar(float progressPercentage, string fileName)
-		{
+		private void UpdateDownloadProgressBar(float progressPercentage, string fileName) {
 			downloadProgressPercentLabel.Content = Math.Round(progressPercentage) + "%";
 			downloadProgressBar.Value = progressPercentage;
 			downloadProgressBar.Visibility = Visibility.Visible;

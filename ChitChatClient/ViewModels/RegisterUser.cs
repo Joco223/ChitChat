@@ -1,67 +1,51 @@
 ﻿using ChitChatClient.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ChitChatClient.ViewModels
-{
-	public class RegisterUser : User
-	{
-        public string Password { get; set; }
+namespace ChitChatClient.ViewModels {
+	/// <summary>
+	/// Class to handle registering a user
+	/// </summary>
+	public class RegisterUser : User {
+		public string Password { get; set; }
 
-        public string ConfirmPassword { get; set; }
+		public string ConfirmPassword { get; set; }
 
-		public RegisterUser() : base()
-		{
-            Username = "";
-            Email = "";
-            Password = "";
-            ConfirmPassword = "";
-        }
+		public RegisterUser() : base() {
+			Username = "";
+			Email = "";
+			Password = "";
+			ConfirmPassword = "";
+		}
 
-        public RegisterUser(string username, string email, string password, string confirmPassword) : base(username, email)
-        {
-            Username = username;
-            Email = email;
-            Password = password;
-            ConfirmPassword = confirmPassword;
-        }
+		/// <summary>
+		/// Check if login data is valid
+		/// </summary>
+		/// <returns></returns>
+		public bool IsLoginValid() => !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password);
 
-        // Check if email and password is not empty
-        public bool IsLoginValid()
-        {
-            return !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password);
-        }
+		/// <summary>
+		/// Check if register data is valid
+		/// </summary>
+		/// <returns></returns>
+		public bool IsRegisterValid() => !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password) && !string.IsNullOrEmpty(ConfirmPassword);
 
-        // Check if username, email, password, confirmPassword is not empty 
-        public bool IsRegisterValid()
-        {
-            return !string.IsNullOrEmpty(Username) && !string.IsNullOrEmpty(Email) && !string.IsNullOrEmpty(Password) && !string.IsNullOrEmpty(ConfirmPassword);
-        }
+		// TODO Regex check if email is valid
 
-        // TODO Regex check if email is valid
+		/// <summary>
+		/// Check if passwords match
+		/// </summary>
+		/// <returns></returns>
+		public bool PasswordsMatch() => Password == ConfirmPassword;
 
+		/// <summary>
+		/// Clears data
+		/// </summary>
+		public void ClearData() {
+			Username = "";
+			Email = "";
+			Password = "";
+			ConfirmPassword = "";
+		}
 
-        // Check if password and confirm password match
-        public bool PasswordsMatch()
-        {
-            return Password == ConfirmPassword;
-        }
-
-        // Clear data
-        public void ClearData()
-        {
-            Username = "";
-            Email = "";
-            Password = "";
-            ConfirmPassword = "";
-        }
-
-        public override string ToString()
-        {
-            return $"Username: {Username}, Email: {Email}, Password: {Password}, ConfirmPassword: {ConfirmPassword}";
-        }
+		public new string GetDebugInfo() => $"Username: {Username}, Email: {Email}, Password: {Password}, ConfirmPassword: {ConfirmPassword}";
 	}
 }

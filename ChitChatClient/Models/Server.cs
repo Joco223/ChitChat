@@ -1,16 +1,12 @@
 ﻿using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ChitChatClient.Models
-{
+namespace ChitChatClient.Models {
+	/// <summary>
+	/// Represents a server in the application
+	/// </summary>
 	[Table("Servers")]
-	public class Server : BaseModel
-	{
+	public class Server : BaseModel {
 		[PrimaryKey("id", false)]
 		public int Id { get; set; }
 
@@ -32,8 +28,7 @@ namespace ChitChatClient.Models
 		[Column("online_user_count")]
 		public int OnlineUserCount { get; set; }
 
-		public Server()
-		{
+		public Server() {
 			Id = -1;
 			Name = string.Empty;
 			Description = string.Empty;
@@ -42,24 +37,13 @@ namespace ChitChatClient.Models
 			UserCount = 0;
 		}
 
-		public Server(string name, int createdBy, string description)
-		{
-			Name = name;
-			Description = description;
-			CreatedBy = createdBy;
-			CreatedAt = DateTime.Now;
-			UserCount = 0;
+		public Server(string name, string description) {
+			Name = name ?? throw new ArgumentNullException(nameof(name));
+			Description = description ?? throw new ArgumentNullException(nameof(description));
 		}
 
-		public Server(int id, string name, int createdBy, DateTime createdAt, string description)
-		{
-            Id = id;
-            Name = name;
-			Description = description;
-            CreatedBy = createdBy;
-            CreatedAt = createdAt;
-        }
-
 		public override string ToString() => Name;
+
+		public string GetDebugInfo() => $"ID: {Id}, Name: {Name}, Description: {Description}, Created By: {CreatedBy}, Created At: {CreatedAt}";
 	}
 }

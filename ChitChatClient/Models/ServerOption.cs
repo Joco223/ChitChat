@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ChitChatClient.Models
-{
-	public class ServerOption
-	{
+﻿
+namespace ChitChatClient.Models {
+	/// <summary>
+	/// Represents a server option for the user to choose from
+	/// when joining a new server
+	/// </summary>
+	public class ServerOption {
 		public Server Server { get; set; }
 		public bool Joined { get; set; }
 		public int OnlineUserCount { get; set; }
@@ -18,20 +15,20 @@ namespace ChitChatClient.Models
 		public string Name => Server.Name;
 		public string Description => Server.Description;
 
-		public ServerOption(Server server, bool joined, int userCount)
-		{
-			Server = server;
+		public ServerOption(Server server, bool joined, int totalUserCount) {
+			Server = server ?? throw new ArgumentNullException(nameof(server));
 			Joined = joined;
-			TotalUserCount = userCount;
+			TotalUserCount = totalUserCount;
 			OnlineUserCount = 0;
 		}
 
-		public ServerOption()
-		{
+		public ServerOption() {
 			Server = new();
 			Joined = false;
 			TotalUserCount = 0;
 			OnlineUserCount = 0;
 		}
+
+		public string GetDebugInfo() => $"Server: {Server.Name}, Joined: {Joined}, Online Users: {OnlineUserCount}, Total Users: {TotalUserCount}";
 	}
 }

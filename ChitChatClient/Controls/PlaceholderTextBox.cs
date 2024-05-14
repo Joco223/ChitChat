@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 
-namespace ChitChatClient.Controls
-{
-	public class PlaceholderTextBox : TextBox
-	{
+namespace ChitChatClient.Controls {
+	/// <summary>
+	/// Extension of default TextBox control with placeholder functionality
+	/// </summary>
+	public class PlaceholderTextBox : TextBox {
 		public string Placeholder { get; set; }
 
-		public PlaceholderTextBox() : base()
-		{
+		public PlaceholderTextBox() : base() {
 			Placeholder = string.Empty;
 			GotFocus += PlaceholderTextBox_GotFocus;
 			LostFocus += PlaceholderTextBox_LostFocus;
@@ -25,10 +20,8 @@ namespace ChitChatClient.Controls
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void PlaceholderTextBox_Initialized(object? sender, EventArgs e)
-		{
-			if (string.IsNullOrEmpty(Text))
-			{
+		private void PlaceholderTextBox_Initialized(object? sender, EventArgs e) {
+			if (string.IsNullOrEmpty(Text)) {
 				ShowPlaceholder();
 			}
 		}
@@ -48,8 +41,7 @@ namespace ChitChatClient.Controls
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
 		private void PlaceholderTextBox_LostFocus(object sender, RoutedEventArgs e) {
-			if (string.IsNullOrEmpty(Text))
-			{
+			if (string.IsNullOrEmpty(Text)) {
 				ShowPlaceholder();
 			}
 		}
@@ -57,8 +49,7 @@ namespace ChitChatClient.Controls
 		/// <summary>
 		/// Shows placeholder and sets foreground to gray
 		/// </summary>
-		public void ShowPlaceholder()
-		{
+		public void ShowPlaceholder() {
 			Text = Placeholder;
 			Foreground = System.Windows.Media.Brushes.Gray;
 		}
@@ -66,8 +57,7 @@ namespace ChitChatClient.Controls
 		/// <summary>
 		/// Hides placeholder and sets foreground to black
 		/// </summary>
-		public void HidePlaceholder()
-		{
+		public void HidePlaceholder() {
 			Text = string.Empty;
 			Foreground = System.Windows.Media.Brushes.Black;
 		}
