@@ -40,9 +40,10 @@ namespace ChitChatClient.ViewModels {
 		/// </summary>
 		/// <param name="server">Server to leave</param>
 		/// <returns></returns>
-		public async Task<bool> LeaveServer(Server server) {
+		public async Task LeaveServer(Server server) {
 			try {
-				return await serverService.LeaveServer(server);
+				await serverService.LeaveServer(server);
+				return;
 			} catch {
 				throw;
 			}

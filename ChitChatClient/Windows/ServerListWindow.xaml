@@ -89,7 +89,7 @@
             </DataGrid>
         </GroupBox>
         <controls:PlaceholderTextBox x:Name="serverSearchTextBox" Grid.Row="1" Grid.Column="0" Margin="2" TextChanged="serverSearchTextBox_TextChanged" VerticalContentAlignment="Center" Placeholder="Filter servers..." />
-        <Button x:Name="joinButton" Grid.Row="1" Grid.Column="1" Content="Join" Margin="2" Padding="5" Click="joinButton_Click"/>
+        <Button x:Name="joinButton" Grid.Row="1" Grid.Column="1" Content="Join" Margin="2" Padding="5" Click="joinButton_Click" IsEnabled="False"/>
         <Button x:Name="refreshButton" Grid.Row="1" Grid.Column="2" Content="Refresh" Margin="2" Padding="5" Click="refreshButton_Click"/>
         <Button x:Name="cancelButton" Grid.Row="1" Grid.Column="3" Content="Cancel" Margin="2" Padding="5" Click="cancelButton_Click"/>
     </Grid>

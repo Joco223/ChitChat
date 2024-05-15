@@ -120,6 +120,8 @@ namespace ChitChatClient.Windows {
 
 		private async void refreshButton_Click(object sender, RoutedEventArgs e) {
 			await RefreshServers();
+			serverListView.SelectedIndex = -1;
+			joinButton.IsEnabled = false;
 		}
 
 		private async void serverListView_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
@@ -175,7 +177,7 @@ namespace ChitChatClient.Windows {
 
 		private void serverListView_SelectionChanged(object sender, SelectionChangedEventArgs e) {
 			// If the selected index is -1, disable the join button
-			joinButton.IsEnabled = serverListView.SelectedIndex == -1;
+			joinButton.IsEnabled = serverListView.SelectedIndex != -1;
 		}
 	}
 }

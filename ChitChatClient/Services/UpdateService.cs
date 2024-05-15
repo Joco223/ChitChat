@@ -37,6 +37,11 @@ namespace ChitChatClient.Services {
 				GitHubClient client = new(new ProductHeaderValue("ChitChat"));
 				Release latestRelease = await client.Repository.Release.GetLatest("Joco223", "ChitChat");
 
+				var tmp = await client.Repository.Release.GetAll("Joco223", "ChitChat");
+				var target = tmp.Where(r => r.TagName == "v0.1.0").First();
+
+				//target.Assets.First().BrowserDownloadUrl;
+
 				return new Version(latestRelease.TagName);
 			} catch (Exception ex) {
 				Log.Error($"Failed to get latest version from GitHub: {ex.Message}");
