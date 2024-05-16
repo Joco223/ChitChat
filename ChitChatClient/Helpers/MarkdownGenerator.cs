@@ -1,7 +1,10 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Documents;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 using Serilog;
 
@@ -27,7 +30,9 @@ namespace ChitChatClient.Helpers {
 		Header3,
 		Header4,
 		Header5,
-		Header6
+		Header6,
+		StarList,
+		DashList
 	}
 
 	/// <summary>
@@ -63,10 +68,13 @@ namespace ChitChatClient.Helpers {
 	/// </summary>
 	public class MarkdownGenerator {
 
+		// Singleton instance of markdown generator
+		public static readonly MarkdownGenerator Instance = new();
+
 		/// <summary>
 		/// List of text sizes for different elements
 		/// </summary>
-		private List<int> TextSizes = new([12, 14, 16, 18, 20, 22, 24]);
+		private List<int> TextSizes = new([12, 14, 16, 18, 20, 22, 24, 12, 12]);
 
 		// These are default text sizes for different elements
 		public int NormalTextSize { get => TextSizes[0]; set => TextSizes[0] = value; }
@@ -77,6 +85,12 @@ namespace ChitChatClient.Helpers {
 		public int Header4Size { get => TextSizes[4]; set => TextSizes[4] = value; }
 		public int Header5Size { get => TextSizes[5]; set => TextSizes[5] = value; }
 		public int Header6Size { get => TextSizes[6]; set => TextSizes[6] = value; }
+
+		public int StarBulletListSize { get => TextSizes[7]; set => TextSizes[7] = value; }
+		public int DashBulletListSize { get => TextSizes[8]; set => TextSizes[8] = value; }
+
+		public int LineSpacing { get; set; } = 0;
+		public int ElementSpacing { get; set; } = 10;
 
 		// This is a global scaling factor by witch everything is multiplied
 		public float GlobalScaling { get; set; } = 1.0f;
@@ -96,6 +110,41 @@ namespace ChitChatClient.Helpers {
 
 			var linesData = lines.Data;
 
+			var result = GenerateMarkdown(linesData);
+
+			if (result.Failed)
+				return Result<StackPanel>.Fail(result.Error);
+
+			return Result<StackPanel>.OK(result.Data);
+		}
+
+		/// <summary>
+		/// Generate a StackPanel component from a text
+		/// </summary>
+		/// <param name="text">Text to parse</param>
+		/// <returns></returns>
+		public Result<StackPanel> GenerateFromText(string text) {
+			var lines = text.Split("\n");
+
+			if (lines.Length == 0)
+				return Result<StackPanel>.Fail("No lines in text");
+
+			var linesData = lines.ToList();
+
+			var result = GenerateMarkdown(linesData);
+
+			if (result.Failed)
+				return Result<StackPanel>.Fail(result.Error);
+
+			return Result<StackPanel>.OK(result.Data);
+		}
+
+		/// <summary>
+		/// Generate a StackPanel component from a list of lines
+		/// </summary>
+		/// <param name="linesData"></param>
+		/// <returns></returns>
+		private Result<StackPanel> GenerateMarkdown(List<string> linesData) {
 			StackPanel rootPanel = new();
 
 			// Enumerate lines in text and generate MarkdownElement objects
@@ -145,6 +194,14 @@ namespace ChitChatClient.Helpers {
 
 			MarkdownElement currentElement = new();
 
+			// For gaps between elements
+			MarkdownElement spaceElement = new() {
+				Type = MarkdownElementType.Normal,
+				SubType = MarkdownElementSubTypes.Normal
+			};
+
+			spaceElement.TextLines.Add("\n");
+
 			// This for loop goes trough every input line and generates a MarkdownElement object
 			// If MarkdownElement doesn't have a type, determine the type by the current line
 			// If MarkdownElement does have a type and current line is empty, add the element to the list and reset it
@@ -178,27 +235,51 @@ namespace ChitChatClient.Helpers {
 						currentElement.Type = MarkdownElementType.Header;
 						currentElement.SubType = MarkdownElementSubTypes.Header6;
 						currentElement.TextLines.Add(RemoveFirst(line, "###### "));
-					} else if (line.StartsWith("* ") || line.StartsWith("- ")) { // Bullet list
+					} else if (line.StartsWith("* ")) { // Bullet list
 						currentElement.Type = MarkdownElementType.BulletList;
+						currentElement.SubType = MarkdownElementSubTypes.StarList;
 
 						// Remove bullet point from line
 						string removedStar = RemoveFirst(line, "* ");
-						string removedDash = RemoveFirst(removedStar, "- ");
+
+						currentElement.TextLines.Add(removedStar);
+					} else if (line.StartsWith("- ")) { // Bullet list
+						currentElement.Type = MarkdownElementType.BulletList;
+						currentElement.SubType = MarkdownElementSubTypes.DashList;
+
+						// Remove bullet point from line
+						string removedDash = RemoveFirst(line, "- ");
 
 						currentElement.TextLines.Add(removedDash);
 					} else {
 						currentElement.Type = MarkdownElementType.Normal;
-						currentElement.TextLines.Add(line);
+
+						// If line is empty, add new line character to it
+						if (string.IsNullOrWhiteSpace(line)) {
+							line += '\n';
+							currentElement.TextLines.Add(line);
+							currentElement = new();
+						} else {
+							currentElement.TextLines.Add(line);
+						}
 					}
 				} else {
 					if (string.IsNullOrWhiteSpace(line)) {
 						markdownLines.Add(currentElement);
-						currentElement.Clear();
+
+						// Add a normal element with just a newline to make space between lines
+						//markdownLines.Add(spaceElement);
+
+						currentElement = new();
 					} else {
 						currentElement.TextLines.Add(line);
 					}
 				}
 			}
+
+			// If element is not nothing, add it
+			if (currentElement.Type != MarkdownElementType.Nothing)
+				markdownLines.Add(currentElement);
 
 			return markdownLines;
 		}
@@ -256,28 +337,78 @@ namespace ChitChatClient.Helpers {
 		/// </summary>
 		/// <param name="element"></param>
 		/// <returns></returns>
-		private Result<FlowDocumentReader> ProcessBulletList(MarkdownElement element) {
+		private Result<StackPanel> ProcessBulletList(MarkdownElement element) {
 			// Calculate font size
 			var fontSize = GetTextSize(element);
 
 			if (fontSize.Failed)
-				return Result<FlowDocumentReader>.Fail(fontSize.Error);
+				return Result<StackPanel>.Fail(fontSize.Error);
 
 			// Create a stack panel for the bullet list
-			FlowDocument result = new();
-
-			// Create list object to add it to the flow document
-			List list = new() {
-				MarkerOffset = 5,
-				MarkerStyle = TextMarkerStyle.Circle
+			StackPanel result = new() {
+				Margin = new Thickness(0, 0, 0, ElementSpacing)
 			};
 
 			foreach (string line in element.TextLines) {
-				List<string> tokens = [.. line.Split(" ")];
+				// Split line into before and after the bullet point
+				List<string> parts = [];
 
-				// Create a list item for each line
-				ListItem listItem = new();
-				Paragraph itemText = new();
+				if (!line.Contains('*') && !line.Contains('-') && element.TextLines.IndexOf(line) != 0)
+					return Result<StackPanel>.Fail("Invalid bullet list line (no bullet point found)");
+
+				if (element.SubType == MarkdownElementSubTypes.StarList) {
+					parts = [.. line.Split('*')];
+				} else if (element.SubType == MarkdownElementSubTypes.DashList) {
+					parts = [.. line.Split('-')];
+				} else {
+					return Result<StackPanel>.Fail("Invalid bullet list type");
+				}
+
+				TextBlock content = new() {
+					FontSize = fontSize.Data,
+					TextWrapping = TextWrapping.WrapWithOverflow,
+					Margin = new Thickness(0, 0, 0, LineSpacing)
+				};
+
+				// Add content before the bullet point
+				if (element.TextLines.IndexOf(line) != 0)
+					content.Inlines.Add(new Run(parts[0]));
+
+				BulletDecorator bulletDecorator = new() {
+					Margin = new Thickness(5, 0, 5, 0),
+					Bullet = new Ellipse() {
+						Width = 5 * GlobalScaling,
+						Height = 5 * GlobalScaling,
+						Fill = Brushes.Black
+					}
+				};
+
+				List<string> tokens = [];
+
+				// Split line into tokens
+				if (element.TextLines.IndexOf(line) == 0) {
+					tokens = [.. line.Split(" ")];
+				} else {
+					// Set non filled ellipse if line is indented
+					if (string.IsNullOrWhiteSpace(parts[0]) && parts[0] != string.Empty) {
+						bulletDecorator.Bullet = new Ellipse() {
+							Width = 5 * GlobalScaling,
+							Height = 5 * GlobalScaling,
+							Stroke = Brushes.Black,
+							StrokeThickness = 1 * GlobalScaling
+						};
+					}
+
+					tokens = [.. parts[1].Split(" ", StringSplitOptions.RemoveEmptyEntries)];
+				}
+
+				TextBlock bulletText = new() {
+					FontSize = fontSize.Data,
+					TextWrapping = TextWrapping.WrapWithOverflow,
+				};
+
+				// Add gap after bulletpoint
+				bulletText.Inlines.Add(" ");
 
 				// Process each token in the line
 				foreach (string token in tokens) {
@@ -285,33 +416,24 @@ namespace ChitChatClient.Helpers {
 
 					// Check if there was an error
 					if (decoratedToken.Failed)
-						return Result<FlowDocumentReader>.Fail(decoratedToken.Error);
+						return Result<StackPanel>.Fail(decoratedToken.Error);
 
-					itemText.Inlines.Add(decoratedToken.Data);
+					bulletText.Inlines.Add(decoratedToken.Data);
 
 					// If it isn't the last token, add space
 					if (tokens.IndexOf(token) < tokens.Count - 1) {
-						itemText.Inlines.Add(" ");
+						bulletText.Inlines.Add(" ");
 					}
 				}
 
-				// Add textblock to the list item
-				listItem.Blocks.Add(itemText);
+				bulletDecorator.Child = bulletText;
+				content.Inlines.Add(bulletDecorator);
 
-				// Add list item to the list
-				list.ListItems.Add(listItem);
+				// Add textblock to the stackpanel
+				result.Children.Add(content);
 			}
 
-			// Add list with elements to the flow document
-			result.Blocks.Add(list);
-
-			// Convert result to flow document reader
-			// so it can be added to the final stack panel
-			FlowDocumentReader flowDocumentReader = new() {
-				Document = result
-			};
-
-			return Result<FlowDocumentReader>.OK(flowDocumentReader);
+			return Result<StackPanel>.OK(result);
 		}
 
 		/// <summary>
@@ -331,8 +453,14 @@ namespace ChitChatClient.Helpers {
 			TextBlock result = new() {
 				FontWeight = FontWeights.Bold,
 				FontSize = fontSize.Data,
-				TextWrapping = TextWrapping.WrapWithOverflow
+				TextWrapping = TextWrapping.WrapWithOverflow,
+				Margin = new Thickness(0, 0, 0, ElementSpacing)
 			};
+
+			// If it is header 1 or 2 add underline text decoration
+			if (element.SubType == MarkdownElementSubTypes.Header1 || element.SubType == MarkdownElementSubTypes.Header2) {
+				result.TextDecorations = TextDecorations.Underline;
+			}
 
 			// Joins all lines into one line
 			string text = string.Join("", element.TextLines);
@@ -393,7 +521,7 @@ namespace ChitChatClient.Helpers {
 		/// <param name="element">Element to get text size from</param>
 		/// <returns></returns>
 		private Result<int> GetTextSize(MarkdownElement element) {
-			if (element.Type != MarkdownElementType.Header && element.Type != MarkdownElementType.Normal) {
+			if (element.Type == MarkdownElementType.Nothing) {
 				Log.Error($"Invalid markdown element passed to GetTextSize {element.GetDebugInfo()}");
 				return Result<int>.Fail("Invalid markdown element passed to GetTextSize");
 			}

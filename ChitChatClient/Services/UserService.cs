@@ -156,5 +156,18 @@ namespace ChitChatClient.Services {
 				throw;
 			}
 		}
+
+		/// <summary>
+		/// Gets the currently logged in user
+		/// </summary>
+		/// <returns></returns>
+		public Result<Supabase.Gotrue.User> GetUser() {
+			var user = supabaseHandler.Client.Auth.CurrentUser;
+
+			if (user == null)
+				return Result<Supabase.Gotrue.User>.Fail("Failed to get user");
+
+			return Result<Supabase.Gotrue.User>.OK(user);
+		}
 	}
 }

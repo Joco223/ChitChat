@@ -25,5 +25,6 @@
         <Button x:Name="registerButton" Content="Create account" Width="150px" Margin="0 5 0 0" Click="registerButton_Click" />
         <Button x:Name="cancelRegistrationButton" Content="Cancel" Width="150px" Margin="0 5 0 0" Visibility="Collapsed" Click="cancelRegistrationButton_Click" />
         <Button x:Name="checkForUpdatesButton" Content="Check for updates" Width="150px" Margin="0 5 0 0" Click="checkForUpdatesButton_Click" />
+        <Button x:Name="releaseNotesButton" Content="Show release notes" Width="150px" Margin="0 5 0 0" Click="releaseNotesButton_Click" />
     </StackPanel>
 </Window>

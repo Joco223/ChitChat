@@ -160,5 +160,10 @@ namespace ChitChatClient {
 				MessageBox.Show("No updates available", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
 			}
 		}
+
+		private void releaseNotesButton_Click(object sender, RoutedEventArgs e) {
+			ReleaseNotesWindow releaseNotesWindow = new();
+			releaseNotesWindow.ShowDialog();
+		}
 	}
 }

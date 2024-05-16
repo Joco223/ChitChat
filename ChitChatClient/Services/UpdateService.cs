@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 
+using ChitChatClient.Helpers;
+
 using Octokit;
 
 using Serilog;
@@ -23,6 +25,28 @@ namespace ChitChatClient.Services {
 		}
 
 		/// <summary>
+		/// Get the changelog for current version
+		/// </summary>
+		/// <returns></returns>
+		public static async Task<Result<string>> GetCurrentChangelog() {
+			GitHubClient client = new(new ProductHeaderValue("ChitChat"));
+
+			var tmp = await client.Repository.Release.GetAll("Joco223", "ChitChat");
+
+			if (tmp.Count == 0)
+				return Result<string>.Fail("No releases found");
+
+			Version currentVersion = GetCurrentVersion();
+
+			var target = tmp.Where(r => r.TagName == currentVersion.ToString()).FirstOrDefault();
+
+			if (target == null)
+				return Result<string>.Fail("No release found for current version");
+
+			return Result<string>.OK(target.Body);
+		}
+
+		/// <summary>
 		/// Get the current version of the application
 		/// </summary>
 		/// <returns>Returns current version object</returns>
@@ -37,10 +61,7 @@ namespace ChitChatClient.Services {
 				GitHubClient client = new(new ProductHeaderValue("ChitChat"));
 				Release latestRelease = await client.Repository.Release.GetLatest("Joco223", "ChitChat");
 
-				var tmp = await client.Repository.Release.GetAll("Joco223", "ChitChat");
-				var target = tmp.Where(r => r.TagName == "v0.1.0").First();
 
-				//target.Assets.First().BrowserDownloadUrl;
 
 				return new Version(latestRelease.TagName);
 			} catch (Exception ex) {
