@@ -353,9 +353,12 @@ namespace ChitChatClient.Helpers {
 				// Split line into before and after the bullet point
 				List<string> parts = [];
 
+				// Check valididty of bullet point
 				if (!line.Contains('*') && !line.Contains('-') && element.TextLines.IndexOf(line) != 0)
 					return Result<StackPanel>.Fail("Invalid bullet list line (no bullet point found)");
 
+				// Split into 3 (before bullet point, bullet point, after bullet point)
+				// Depending on type of bullet point
 				if (element.SubType == MarkdownElementSubTypes.StarList) {
 					parts = [.. line.Split('*')];
 				} else if (element.SubType == MarkdownElementSubTypes.DashList) {
@@ -364,6 +367,7 @@ namespace ChitChatClient.Helpers {
 					return Result<StackPanel>.Fail("Invalid bullet list type");
 				}
 
+				// Current line content
 				TextBlock content = new() {
 					FontSize = fontSize.Data,
 					TextWrapping = TextWrapping.WrapWithOverflow,
@@ -374,6 +378,7 @@ namespace ChitChatClient.Helpers {
 				if (element.TextLines.IndexOf(line) != 0)
 					content.Inlines.Add(new Run(parts[0]));
 
+				// Bullet list element
 				BulletDecorator bulletDecorator = new() {
 					Margin = new Thickness(5, 0, 5, 0),
 					Bullet = new Ellipse() {
@@ -399,6 +404,7 @@ namespace ChitChatClient.Helpers {
 						};
 					}
 
+					// Split text into words
 					tokens = [.. parts[1].Split(" ", StringSplitOptions.RemoveEmptyEntries)];
 				}
 
