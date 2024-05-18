@@ -4,6 +4,8 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using ChitChat.Services;
 using ChitChat.ViewModels;
+using MsBox.Avalonia;
+using MsBox.Avalonia.Enums;
 using Serilog;
 using Supabase.Gotrue;
 
@@ -11,27 +13,17 @@ namespace ChitChat.Views;
 
 public partial class MainWindow : Window
 {
-    private bool registerMode = false;
+	private bool registerMode = false;
 
 	private readonly UserService userService = UserService.Instance;
-	private readonly SupabaseService supabaseHandler = SupabaseService.Instance;
+
+	private MainWindowViewModel context = new();
 
 	public MainWindow() {
 		InitializeComponent();
 
 		// Set version
 		versionLabel.Content = $"Version: {UpdateService.GetCurrentVersion()}";
-	}
-
-
-	/// <summary>
-	/// Clears input fields
-	/// </summary>
-	private void ClearInput() {
-		email.Text = string.Empty;
-		password.Text = string.Empty;
-		confirmPassword.Text = string.Empty;
-		(DataContext as MainWindowViewModel)?.ClearData();
 	}
 
 	/// <summary>
@@ -45,7 +37,7 @@ public partial class MainWindow : Window
 		cancelRegistrationButton.IsVisible = false;
 		loginButton.IsVisible = true;
 		registerMode = false;
-		ClearInput();
+		context?.ClearData();
 	}
 
 	/// <summary>
@@ -59,37 +51,37 @@ public partial class MainWindow : Window
 		cancelRegistrationButton.IsVisible = true;
 		loginButton.IsVisible = false;
 		registerMode = true;
-		ClearInput();
+		context?.ClearData();
 	}
 
 	async private void registerButton_Click(object sender, RoutedEventArgs e) {
-		try {
-			if (registerMode) {
-				// Check if username, email, and password are not empty
-				if (!(DataContext as MainWindowViewModel)?.IsRegisterValid() == true) {
-					//MessageBox.Show("All fields are required", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-					return;
-				}
-
-				// Register user
-				if ((DataContext as MainWindowViewModel)?.IsLoginValid() == true) {
-					await userService.RegisterUser((DataContext as MainWindowViewModel)?.GetUser(), password.Text);
-
-					//MessageBox.Show("User registered successfully", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-
-					// Clear form
-					ShowLoginForm();
-
-				} else {
-					//MessageBox.Show("Passwords do not match", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-				}
-			} else {
-				// Show registration form
-				ShowRegistrationForm();
+		if (registerMode) {
+			// Check if username, email, and password are not empty
+			if (!context.IsRegisterValid()) {
+				var errorNotification = MessageBoxManager.GetMessageBoxStandard("Error", "Username, email, and password are required", ButtonEnum.Ok);
+				await errorNotification.ShowWindowDialogAsync(this);
+				return;
 			}
-		} catch (Exception ex) {
-			// Show the error to the user
-			//MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+
+			// Register user
+			if (context.IsLoginValid()) {
+				await userService.RegisterUser(context.GetUser(), context.Password);
+
+				// Inform user registration was sucesfull
+				var successNotification = MessageBoxManager.GetMessageBoxStandard("Success", "User registered successfully", ButtonEnum.Ok);
+				await successNotification.ShowWindowDialogAsync(this);
+
+				// Clear form
+				ShowLoginForm();
+
+			} else {
+				// Inform user that passwords do not match
+				var errorNotification = MessageBoxManager.GetMessageBoxStandard("Error", "Passwords do not match", ButtonEnum.Ok);
+				await errorNotification.ShowWindowDialogAsync(this);
+			}
+		} else {
+			// Show registration form
+			ShowRegistrationForm();
 		}
 	}
 
@@ -97,31 +89,37 @@ public partial class MainWindow : Window
 		ShowLoginForm();
 	}
 
-	async private void loginButton_Click(object sender, RoutedEventArgs e) {
+	private async void loginButton_Click(object sender, RoutedEventArgs e) {
 		// Check if email and password are not empty
-		if (!(DataContext as MainWindowViewModel)?.IsLoginValid() == true) {
-			//MessageBox.Show("Email and password are required", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		if (!context.IsLoginValid()) {
+			var errorNotification = MessageBoxManager.GetMessageBoxStandard("Error", "Email and password are required", ButtonEnum.Ok);
+			await errorNotification.ShowWindowDialogAsync(this);
 			return;
 		}
 
 		// Login user
-		try {
-			Session? session = await supabaseHandler.Client.Auth.SignIn(email.Text, password.Text);
+		var loginResult = await userService.LogInUser(context.Email, context.Password);
 
-			if (session != null) {
-				// Set user online
-				await userService.SetUserOnline(true);
-
-				//var chatWindow = new ChatWindow();
-				//chatWindow.Show();
-				Close();
-			} else {
-				Log.Error($"Error logging in the user {(DataContext as MainWindowViewModel)?.GetDebugInfo()}");
-				//MessageBox.Show("Invalid email or password", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-			}
-		} catch (Exception ex) {
-			//MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+		// Check if session is null
+		if (loginResult.Failed) {
+			var errorNotification = MessageBoxManager.GetMessageBoxStandard("Error", "Invalid email or password", ButtonEnum.Ok);
+			await errorNotification.ShowWindowDialogAsync(this);
+			return;
 		}
+
+		// Set user online
+		var setOnlineResult = await userService.SetUserOnline(true);
+
+		// Check if user is online
+		if (setOnlineResult.Failed) {
+			var errorNotification = MessageBoxManager.GetMessageBoxStandard("Error", "Failed to set user online", ButtonEnum.Ok);
+			await errorNotification.ShowWindowDialogAsync(this);
+			return;
+		}
+
+		var chatWindow = new ChatWindow();
+		chatWindow.Show();
+		Close();
 	}
 
 	private async void checkForUpdatesButton_Click(object sender, RoutedEventArgs e) {
@@ -136,18 +134,23 @@ public partial class MainWindow : Window
 	/// <returns></returns>
 	private async Task CheckForUpdates(bool notify = false) {
 		if (await UpdateService.CheckForUpdates()) {
-			//MessageBox.Show("There is a new version available, run launcher to update", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
+			var updateNotification = MessageBoxManager.GetMessageBoxStandard("Update", "There is a new version available, run launcher to update", ButtonEnum.Ok);
+			await updateNotification.ShowWindowDialogAsync(this);
 		} else if (notify) {
-			//MessageBox.Show("No updates available", "Update", MessageBoxButton.OK, MessageBoxImage.Information);
+			var noUpdateNotification = MessageBoxManager.GetMessageBoxStandard("Update", "No updates available", ButtonEnum.Ok);
+			await noUpdateNotification.ShowWindowDialogAsync(this);
 		}
 	}
 
-	private void releaseNotesButton_Click(object sender, RoutedEventArgs e) {
-		//ReleaseNotesWindow releaseNotesWindow = new();
-		//releaseNotesWindow.ShowDialog();
+	private async void releaseNotesButton_Click(object sender, RoutedEventArgs e) {
+		ReleaseNotesWindow releaseNotesWindow = new();
+		await releaseNotesWindow.ShowDialog(this);
 	}
 
 	private async void Window_Opened(object sender, EventArgs e) {
+		// Set context
+		context = (MainWindowViewModel)DataContext!;
+
 		// Check for updates
 		await CheckForUpdates();
 	}

@@ -1,0 +1,120 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+		x:Class="ChitChat.Views.ServerSettingsWindow"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="using:ChitChat.ViewModels"
+		xmlns:m="using:ChitChat.Models"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:gb="using:GroupBox.Avalonia.Controls"
+		xmlns:local="clr-namespace:ChitChat.Views"
+		mc:Ignorable="d"
+		Title="ChitChat - Server settings" Height="450" Width="800">
+	<Grid Margin="5">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="*"/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*"/>
+			<RowDefinition Height="Auto"/>
+		</Grid.RowDefinitions>
+		<gb:GroupBox Header="Server info" Grid.Column="0" Padding="5" Grid.RowSpan="2" Grid.Row="0">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<Grid Grid.Row="0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<TextBlock Text="Server name" Grid.Row="0" HorizontalAlignment="Center" />
+					<TextBox x:Name="serverName" Grid.Row="1" Text="{Binding Name, DataType={x:Type m:Server}}" />
+				</Grid>
+				<TextBlock Text="Server description" HorizontalAlignment="Center" Grid.Row="1" Margin="0 10 0 0" />
+				<TextBox x:Name="serverDescription" Grid.Row="2" TextWrapping="WrapWithOverflow" Text="{Binding Description, DataType={x:Type m:Server}}" />
+				<CheckBox x:Name="isPublic" Grid.Row="3" Content="Is server private" Margin="0 5 0 5" />
+				<StackPanel Grid.Row="4" HorizontalAlignment="Stretch">
+					<Button x:Name="viewWordFilterButton" Content="View word filters" Margin="0 0 0 5" />
+					<Button x:Name="viewServerInvitesButton" Content="View server invites" Margin="0 0 0 5"/>
+					<Button x:Name="saveServerButton" Content="Save server settings" Margin="0 0 0 5" Click="saveServerButton_Click"/>
+					<Button x:Name="deleteServerButton" Content="Delete server" />
+				</StackPanel>
+			</Grid>
+		</gb:GroupBox>
+		<gb:GroupBox Header="Channels" Grid.Column="1" Padding="5" Grid.Row="0">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<ListBox x:Name="channelsList" Grid.Row="0" />
+				<TextBox x:Name="filterChannelList" Grid.Row="1" Margin="0 5 0 0" Watermark="Filter channels..." />
+				<Grid Grid.Row="2" HorizontalAlignment="Stretch" Margin="0 5 0 0" >
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Button x:Name="addChannelButton" Grid.Column="0" Content="Add channel" Margin="0 0 5 0" />
+					<Button x:Name="deleteChannelButton" Grid.Column="1" Content="Delete channel" Margin="5 0 0 0 " />
+				</Grid>
+
+			</Grid>
+		</gb:GroupBox>
+		<gb:GroupBox Header="Selected channel" Margin="0 5 0 0" Padding="5" Grid.Row="1" Grid.Column="1">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<Grid Grid.Row="0">
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />
+						<RowDefinition Height="*" />
+					</Grid.RowDefinitions>
+					<TextBlock Text="Channel name" Grid.Row="0" HorizontalAlignment="Center" />
+					<TextBox x:Name="selectedChannelName" Grid.Row="1" />
+				</Grid>
+				<StackPanel Grid.Row="1" HorizontalAlignment="Stretch" Margin="0 5 0 0">
+					<TextBlock Text="Channel description" HorizontalAlignment="Center" />
+					<TextBox x:Name="selectedChannelDescription" Height="50" />
+				</StackPanel>
+				<StackPanel Grid.Row="2" HorizontalAlignment="Stretch" Margin="0 5 0 0">
+					<Button x:Name="channelPermissionsButton" Content="View channel permissions" Margin="0 0 0 5" />
+					<Button x:Name="saveChannelButton" Content="Save channel settings"/>
+				</StackPanel>
+			</Grid>
+		</gb:GroupBox>
+		<gb:GroupBox Header="Roles &amp; Permissions" Padding="5" Grid.Row="0" Grid.RowSpan="2" Grid.Column="2">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+					<RowDefinition Height="Auto" />
+				</Grid.RowDefinitions>
+				<ListBox x:Name="roleListBox" Grid.Row="0" />
+				<TextBox x:Name="filterRoleList" Grid.Row="1" Margin="0 5 0 0" Watermark="Filter roles..." />
+				<Grid Grid.Row="2" HorizontalAlignment="Stretch" Margin="0 5 0 0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />
+						<ColumnDefinition Width="*" />
+					</Grid.ColumnDefinitions>
+					<Button x:Name="addRoleButton" Grid.Column="0" Content="Add role" Margin="0 0 5 0" />
+					<Button x:Name="deleteRoleButton" Grid.Column="1" Content="Delete role" Margin="5 0 0 0" />
+				</Grid>
+				<StackPanel Grid.Row="3" HorizontalAlignment="Stretch" Margin="0 5 0 0">
+					<Button x:Name="rolePermissionsButton" Content="View role permissions" Margin="0 0 0 5" />
+					<Button x:Name="saveRoleButton" Content="Save role settings" />
+				</StackPanel>
+			</Grid>
+		</gb:GroupBox>
+	</Grid>
+</Window>

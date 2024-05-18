@@ -8,17 +8,17 @@ public class MainWindowViewModel : ViewModelBase
 
 	public string Email { get; set; }
 
-    public string Password { get; set; }
+	public string Password { get; set; }
 
 	public string ConfirmPassword { get; set; }
 
-    public MainWindowViewModel()
-    {
+	public MainWindowViewModel()
+	{
 		Username = string.Empty;
 		Email = string.Empty;
 		Password = string.Empty;
 		ConfirmPassword = string.Empty;
-    }
+	}
 
 	/// <summary>
 	/// Check if login data is valid

@@ -1,15 +1,15 @@
 <Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             x:Class="ChitChatLauncher.App"
-             xmlns:local="using:ChitChatLauncher"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 x:Class="ChitChatLauncher.App"
+			 xmlns:local="using:ChitChatLauncher"
+			 RequestedThemeVariant="Default">
+			 <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
-  
-    <Application.Styles>
-        <SimpleTheme />
-    </Application.Styles>
+	<Application.DataTemplates>
+		<local:ViewLocator/>
+	</Application.DataTemplates>
+
+	<Application.Styles>
+		<SimpleTheme />
+	</Application.Styles>
 </Application>

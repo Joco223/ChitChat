@@ -21,9 +21,9 @@ namespace ChitChat.Services {
 		/// <returns>Returns true if there is a new update</returns>
 		public static async Task<bool> CheckForUpdates() {
 			Version currentVersion = GetCurrentVersion();
-			Version latestVersion = await GetLatestVersion();
+			var latestVersion = await GetLatestVersion();
 
-			return latestVersion > currentVersion;
+			return latestVersion.Data > currentVersion;
 		}
 
 		/// <summary>
@@ -58,17 +58,15 @@ namespace ChitChat.Services {
 		/// Get the latest version of the application from GitHub
 		/// </summary>
 		/// <returns>Returns latest version object</returns>
-		private static async Task<Version> GetLatestVersion() {
+		private static async Task<Result<Version>> GetLatestVersion() {
 			try {
 				GitHubClient client = new(new ProductHeaderValue("ChitChat"));
 				Release latestRelease = await client.Repository.Release.GetLatest("Joco223", "ChitChat");
 
-
-
-				return new Version(latestRelease.TagName);
+				return Result<Version>.OK(new Version(latestRelease.TagName));
 			} catch (Exception ex) {
 				Log.Error($"Failed to get latest version from GitHub: {ex.Message}");
-				throw;
+				return Result<Version>.Fail("Failed to get latest version");
 			}
 		}
 	}
