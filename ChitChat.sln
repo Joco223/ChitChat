@@ -1,46 +1,31 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.9.34728.123
+VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChatClient", "ChitChatClient\ChitChatClient.csproj", "{EFF700B8-FEF7-4516-A0F4-67EB6682BB82}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat", "ChitChat\ChitChat.csproj", "{0F411B58-82B0-451F-BD32-B6650160E40D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChatLauncher", "ChitChatLauncher\ChitChatLauncher.csproj", "{63148D4B-8CAC-4F0A-A97B-7134DCE6AFAD}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3299120F-0A20-4769-88C1-42A8248E74B5}"
-	ProjectSection(SolutionItems) = preProject
-		release_notes.md = release_notes.md
-	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChatLauncher", "ChitChatLauncher\ChitChatLauncher.csproj", "{D7C929F6-0078-4788-A874-4A300E9AC3B9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
-		Debug|x64 = Debug|x64
 		Release|Any CPU = Release|Any CPU
-		Release|x64 = Release|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EFF700B8-FEF7-4516-A0F4-67EB6682BB82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{EFF700B8-FEF7-4516-A0F4-67EB6682BB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{EFF700B8-FEF7-4516-A0F4-67EB6682BB82}.Debug|x64.ActiveCfg = Debug|x64
-		{EFF700B8-FEF7-4516-A0F4-67EB6682BB82}.Debug|x64.Build.0 = Debug|x64
-		{EFF700B8-FEF7-4516-A0F4-67EB6682BB82}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{EFF700B8-FEF7-4516-A0F4-67EB6682BB82}.Release|Any CPU.Build.0 = Release|Any CPU
-		{EFF700B8-FEF7-4516-A0F4-67EB6682BB82}.Release|x64.ActiveCfg = Release|x64
-		{EFF700B8-FEF7-4516-A0F4-67EB6682BB82}.Release|x64.Build.0 = Release|x64
-		{63148D4B-8CAC-4F0A-A97B-7134DCE6AFAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{63148D4B-8CAC-4F0A-A97B-7134DCE6AFAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{63148D4B-8CAC-4F0A-A97B-7134DCE6AFAD}.Debug|x64.ActiveCfg = Debug|x64
-		{63148D4B-8CAC-4F0A-A97B-7134DCE6AFAD}.Debug|x64.Build.0 = Debug|x64
-		{63148D4B-8CAC-4F0A-A97B-7134DCE6AFAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{63148D4B-8CAC-4F0A-A97B-7134DCE6AFAD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{63148D4B-8CAC-4F0A-A97B-7134DCE6AFAD}.Release|x64.ActiveCfg = Release|x64
-		{63148D4B-8CAC-4F0A-A97B-7134DCE6AFAD}.Release|x64.Build.0 = Release|x64
+		{0F411B58-82B0-451F-BD32-B6650160E40D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F411B58-82B0-451F-BD32-B6650160E40D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F411B58-82B0-451F-BD32-B6650160E40D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F411B58-82B0-451F-BD32-B6650160E40D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7C929F6-0078-4788-A874-4A300E9AC3B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7C929F6-0078-4788-A874-4A300E9AC3B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7C929F6-0078-4788-A874-4A300E9AC3B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7C929F6-0078-4788-A874-4A300E9AC3B9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {9BA49B16-0E25-47B3-9962-923EC7D8BBB9}
+		SolutionGuid = {652B33F5-4429-47FD-9CEA-0073B66A8949}
 	EndGlobalSection
 EndGlobal

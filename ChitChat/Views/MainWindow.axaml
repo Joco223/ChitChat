@@ -1,0 +1,38 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ChitChat.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ChitChat.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/chitchatclient.ico"
+        Title="ChitChat"
+        Opened="Window_Opened">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+    <StackPanel x:Name="loginPanel" Margin="10" VerticalAlignment="Center" HorizontalAlignment="Center" >
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <Image Source="/Assets/chitchatclient.png" Width="50" Height="50" VerticalAlignment="Center" HorizontalAlignment="Center" />
+            <Label Content="ChitChat" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold" VerticalAlignment="Center" />
+        </StackPanel>
+        <Label Name="versionLabel" HorizontalAlignment="Center" FontSize="12" FontWeight="Bold" />
+        <Label x:Name="usernameLabel" Content="Username" HorizontalAlignment="Center" IsVisible="False" />
+        <TextBox x:Name="username" Width="150" IsVisible="False"  Text="{Binding Username, Mode=TwoWay}"/>
+        <Label Content="E-Mail" HorizontalAlignment="Center" />
+        <TextBox x:Name="email" Width="150" Text="{Binding Email, Mode=TwoWay}" />
+        <Label Content="Password" HorizontalAlignment="Center"/>
+        <TextBox x:Name="password" PasswordChar="*" Width="150" />
+        <Label x:Name="confirmPasswordLabel" Content="Confirm password" HorizontalAlignment="Center" IsVisible="False" />
+        <TextBox x:Name="confirmPassword" PasswordChar="*" Width="150" IsVisible="False" />
+        <Button x:Name="loginButton" Content="Login" Width="150" Margin="0 15 0 0" Click="loginButton_Click" />
+        <Button x:Name="registerButton" Content="Create account" Width="150" Margin="0 5 0 0" Click="registerButton_Click" />
+        <Button x:Name="cancelRegistrationButton" Content="Cancel" Width="150" Margin="0 5 0 0" IsVisible="False"  Click="cancelRegistrationButton_Click" />
+        <Button x:Name="checkForUpdatesButton" Content="Check for updates" Width="150" Margin="0 5 0 0" Click="checkForUpdatesButton_Click" />
+        <Button x:Name="releaseNotesButton" Content="Show release notes" Width="150" Margin="0 5 0 0" Click="releaseNotesButton_Click" />
+    </StackPanel>
+</Window>
