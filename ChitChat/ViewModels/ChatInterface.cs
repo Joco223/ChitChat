@@ -4,26 +4,30 @@ using System.Threading.Tasks;
 using ChitChat.Helpers;
 using ChitChat.Models;
 using ChitChat.Services;
+using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ChitChat.ViewModels {
 	/// <summary>
 	/// Class to handle chat interface operations
 	/// </summary>
-	public class ChatInterface {
+	public partial class ChatInterface : ObservableObject {
 		private static readonly ServerService serverService = ServerService.Instance;
 		private static readonly UserService userService = UserService.Instance;
 		private static readonly ChannelService channelService = ChannelService.Instance;
 
-		public List<Server> Servers { get; set; }
+		[ObservableProperty]
+		private List<Server> servers;
 
-		public List<User> CurrentServerUsers { get; set; }
+		[ObservableProperty]
+		public List<User> currentServerUsers;
 
-		public List<Channel> CurrentServerChannels { get; set; }
+		[ObservableProperty]
+		public List<Channel> currentServerChannels;
 
 		public ChatInterface() {
-			Servers = [];
-			CurrentServerUsers = [];
-			CurrentServerChannels = [];
+			servers = [];
+			currentServerUsers = [];
+			currentServerChannels = [];
 		}
 
 		/// <summary>
