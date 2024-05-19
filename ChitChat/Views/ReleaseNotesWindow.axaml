@@ -15,7 +15,7 @@
 		</Grid.RowDefinitions>
 		<Label x:Name="titleLabel" Grid.Row="0" Content="Release notes" FontWeight="Bold" FontSize="30" HorizontalAlignment="Center" />
 		<Border Grid.Row="1" BorderBrush="Gray" BorderThickness="2" Margin="5">
-			<ScrollViewer x:Name="notesScrollViewer">
+			<ScrollViewer x:Name="notesScrollViewer" Padding="5">
 				<!--<StackPanel x:Name="notesStackPanel" HorizontalAlignment="Stretch" Margin="5">
 				</StackPanel>-->
 			</ScrollViewer>

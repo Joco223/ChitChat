@@ -381,13 +381,13 @@ namespace ChitChat.Helpers {
 					content.Inlines.Add(new Run(parts[0]));
 
 				// Bullet list element
-				Decorator bulletDecorator = new() {
-					Margin = new Thickness(5, 0, 5, 0),
-					// Bullet = new Ellipse() {
-					// 	Width = 5 * GlobalScaling,
-					// 	Height = 5 * GlobalScaling,
-					// 	Fill = Brushes.Black
-					// }
+				Ellipse ellipse = new() {
+					Width = 5 * GlobalScaling,
+					Height = 5 * GlobalScaling,
+					Stroke = Brushes.Black,
+					StrokeThickness = 1 * GlobalScaling,
+					Fill = Brushes.Black,
+					Margin = new Thickness(0, 0, 5 * GlobalScaling, 0)
 				};
 
 				List<string> tokens = [];
@@ -398,12 +398,13 @@ namespace ChitChat.Helpers {
 				} else {
 					// Set non filled ellipse if line is indented
 					if (string.IsNullOrWhiteSpace(parts[0]) && parts[0] != string.Empty) {
-						// bulletDecorator.Bullet = new Ellipse() {
-						// 	Width = 5 * GlobalScaling,
-						// 	Height = 5 * GlobalScaling,
-						// 	Stroke = Brushes.Black,
-						// 	StrokeThickness = 1 * GlobalScaling
-						// };
+						ellipse = new() {
+							Width = 5 * GlobalScaling,
+							Height = 5 * GlobalScaling,
+							Stroke = Brushes.Black,
+							StrokeThickness = 1 * GlobalScaling,
+							Margin = new Thickness(0, 0, 5 * GlobalScaling, 0)
+						};
 					}
 
 					// Split text into words
@@ -434,8 +435,8 @@ namespace ChitChat.Helpers {
 					}
 				}
 
-				bulletDecorator.Child = bulletText;
-				content.Inlines.Add(bulletDecorator);
+				content.Inlines.Add(ellipse);
+				content.Inlines.Add(bulletText);
 
 				// Add textblock to the stackpanel
 				result.Children.Add(content);
@@ -465,11 +466,6 @@ namespace ChitChat.Helpers {
 				Margin = new Thickness(0, 0, 0, ElementSpacing)
 			};
 
-			// If it is header 1 or 2 add underline text decoration
-			if (element.SubType == MarkdownElementSubTypes.Header1 || element.SubType == MarkdownElementSubTypes.Header2) {
-				result.TextDecorations = TextDecorations.Underline;
-			}
-
 			// Joins all lines into one line
 			string text = string.Join("", element.TextLines);
 
@@ -483,13 +479,17 @@ namespace ChitChat.Helpers {
 				if (decoratedToken.Failed)
 					return Result<TextBlock>.Fail(decoratedToken.Error);
 
-				// Add token to the textblock
-				result.Inlines.Add(decoratedToken.Data);
+				if (element.SubType == MarkdownElementSubTypes.Header1 || element.SubType == MarkdownElementSubTypes.Header2) {
+					decoratedToken.Data.TextDecorations = TextDecorations.Underline;
+				}
 
 				// If it isn't the last token, add space
 				if (tokens.IndexOf(token) < tokens.Count - 1) {
-					result.Inlines.Add(" ");
+					decoratedToken.Data.Text += " ";
 				}
+
+				// Add token to the textblock
+				result.Inlines.Add(decoratedToken.Data);
 			}
 
 			return Result<TextBlock>.OK(result);

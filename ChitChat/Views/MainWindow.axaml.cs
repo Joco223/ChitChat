@@ -6,8 +6,6 @@ using ChitChat.Services;
 using ChitChat.ViewModels;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
-using Serilog;
-using Supabase.Gotrue;
 
 namespace ChitChat.Views;
 
