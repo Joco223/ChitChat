@@ -7,11 +7,12 @@
 	<ApplicationManifest>app.manifest</ApplicationManifest>
 	<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
 	<ApplicationIcon>chitchatclient.ico</ApplicationIcon>
-	<NoWarn>CS8601;CS8602;CS8600</NoWarn>
+	<NoWarn>CS8601;CS8602;CS8600;CS8604;CS8603;CS8767</NoWarn>
 	<AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
 
   <ItemGroup>
+	<Folder Include="DatabaseModels\" />
 	<Folder Include="Models\" />
 	<AvaloniaResource Include="Assets\**" />
   </ItemGroup>

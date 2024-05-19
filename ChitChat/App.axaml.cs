@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using ChitChat.Services;
@@ -24,6 +25,7 @@ public partial class App : Application
 	{
 		if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
 		{
+			desktop.Exit += OnExit;
 			desktop.MainWindow = new MainWindow
 			{
 				DataContext = new MainWindowViewModel(),
@@ -33,7 +35,7 @@ public partial class App : Application
 		base.OnFrameworkInitializationCompleted();
 	}
 
-	private void OnExit(object sender, ControlledApplicationLifetimeExitEventArgs e)
+	private void OnExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
 	{
 		try {
 

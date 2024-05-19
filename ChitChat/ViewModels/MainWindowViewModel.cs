@@ -1,4 +1,4 @@
-﻿using ChitChat.Models;
+﻿using ChitChat.DatabaseModels;
 
 namespace ChitChat.ViewModels;
 

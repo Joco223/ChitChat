@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ChitChat.Helpers;
-using ChitChat.Models;
+using ChitChat.DatabaseModels;
 
 using Serilog;
+using ChitChat.Models;
 
 namespace ChitChat.Services {
 	/// <summary>
@@ -180,7 +181,7 @@ namespace ChitChat.Services {
 			var serverUsers = serverUsersRequest.Models;
 
 			// Return online user count
-			return Result<int>.OK(serverUsers.Count);
+			return Result<int>.OK(serverUsers.Where(x => x.IsOnline).Count());
 		}
 
 		/// <summary>

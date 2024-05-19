@@ -1,6 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
-using ChitChat.Models;
+using ChitChat.DatabaseModels;
 using ChitChat.Services;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;

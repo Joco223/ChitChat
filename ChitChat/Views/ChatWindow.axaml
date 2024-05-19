@@ -2,10 +2,12 @@
 		x:Class="ChitChat.Views.ChatWindow"
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:vm="using:ChitChat.ViewModels"
+		xmlns:dm="using:ChitChat.DatabaseModels"
 		xmlns:m="using:ChitChat.Models"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 		xmlns:gb="using:GroupBox.Avalonia.Controls"
+		xmlns:helpers="clr-namespace:ChitChat.Helpers"
 		xmlns:local="clr-namespace:ChitChat.Views"
 		mc:Ignorable="d"
 		x:DataType="vm:ChatInterface"
@@ -32,14 +34,14 @@
 					<RowDefinition Height="Auto" />
 					<RowDefinition Height="Auto" />
 				</Grid.RowDefinitions>
-				<ListBox x:Name="serverListView" BorderThickness="2" Margin="2" Grid.Row="0" SelectionMode="Single" ItemsSource="{Binding Servers}" SelectionChanged="serverListView_SelectionChanged">
+				<ListBox x:Name="serverListView" BorderThickness="2" Margin="2" Grid.Row="0" SelectionMode="Single" ItemsSource="{Binding ServersFiltered}" SelectionChanged="serverListView_SelectionChanged">
 					<ListBox.ItemTemplate>
 						<DataTemplate>
-							<TextBlock Text="{Binding Name, DataType={x:Type m:Server}}"></TextBlock>
+							<TextBlock Text="{Binding Name, DataType={x:Type dm:Server}}"></TextBlock>
 						</DataTemplate>
 					</ListBox.ItemTemplate>
 				</ListBox>
-				<TextBox x:Name="filterServerTextBox" Grid.Row="1" Margin="2" TextChanged="filterServerTextBox_TextChanged" Watermark="Search servers..." />
+				<TextBox x:Name="filterServerTextBox" Grid.Row="1" Margin="2" Text="{Binding ServerFilterText}" TextChanged="filterServerTextBox_TextChanged" Watermark="Search servers..." />
 				<Grid Grid.Row="2">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />
@@ -114,30 +116,17 @@
 						<TextBlock x:Name="totalUserCountTB" Text="" Padding="2" HorizontalAlignment="Center" />
 					</Border>
 				</Grid>
-				<ListBox x:Name="userListView" BorderThickness="2" Margin="2" Grid.Row="1" ItemsSource="{Binding CurrentServerUsers}" >
-					<!-- <ListView.Resources>
-						<DataTemplate x:Key="OnlineTemplate">
+				<ListBox x:Name="userListView" BorderThickness="2" Margin="2" Grid.Row="1" ItemsSource="{Binding UsersFiltered}" >
+					<ListBox.ItemTemplate>
+						<DataTemplate>
 							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-								<Ellipse Width="10" Height="10" Margin="0 0 5 0" Fill="Green" />
-								<TextBlock Text="{Binding Username}"></TextBlock>
+								<Ellipse Width="10" Height="10" Margin="0 0 5 0" Stroke="Gray" StrokeThickness="1" VerticalAlignment="Center" Fill="{Binding StatusColor, DataType={x:Type m:ServerUser}}" />
+								<TextBlock Text="{Binding Username, DataType={x:Type m:ServerUser}}" VerticalAlignment="Center"></TextBlock>
 							</StackPanel>
 						</DataTemplate>
-
-						<DataTemplate x:Key="OfflineTemplate">
-							<StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
-								<Ellipse Width="10" Height="10" Margin="0 0 5 0" Fill="Red" />
-								<TextBlock Text="{Binding Username}"></TextBlock>
-							</StackPanel>
-						</DataTemplate>
-
-						<helpers:UserOnlineDTS x:Key="UserOnlineDTS" OnlineTemplate="{StaticResource OnlineTemplate}" OfflineTemplate="{StaticResource OfflineTemplate}" />
-					</ListView.Resources>
-
-					<ListBox.ItemTemplateSelector>
-						<helpers:UserOnlineDTS OnlineTemplate="{StaticResource OnlineTemplate}" OfflineTemplate="{StaticResource OfflineTemplate}" />
-					</ListBox.ItemTemplateSelector> -->
+					</ListBox.ItemTemplate>
 				</ListBox>
-				<TextBox x:Name="userFilterTextBox" Grid.Row="2" Margin="2" TextChanged="userFilterTextBox_TextChanged" Watermark="Search users..."  />
+				<TextBox x:Name="userFilterTextBox" Grid.Row="2" Margin="2" Text="{Binding UserFilterText}" TextChanged="userFilterTextBox_TextChanged" Watermark="Search users..."  />
 				<Button x:Name="accountSettingsButton" Content="Account settings" Margin="2" Grid.Row="3" Click="accountSettingsButton_Click" />
 			</Grid>
 		</gb:GroupBox>

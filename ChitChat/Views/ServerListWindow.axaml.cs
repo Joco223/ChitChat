@@ -3,11 +3,12 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using ChitChat.Helpers;
-using ChitChat.Models;
+using ChitChat.DatabaseModels;
 using ChitChat.Services;
 using ChitChat.ViewModels;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Enums;
+using ChitChat.Models;
 
 namespace ChitChat.Views {
 	/// <summary>

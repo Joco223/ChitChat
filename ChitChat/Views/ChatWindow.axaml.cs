@@ -5,7 +5,7 @@ using System.Windows;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Threading;
-using ChitChat.Models;
+using ChitChat.DatabaseModels;
 using ChitChat.Services;
 using ChitChat.ViewModels;
 using MsBox.Avalonia;
@@ -74,7 +74,8 @@ namespace ChitChat.Views {
 			}
 
 			// Refresh the user list view if there are servers
-			if (chatInterface.HasServers() && SelectedServer != null) {
+			if (chatInterface.HasServers()) {
+				serverListView.SelectedIndex = 0;
 				await chatInterface.RefreshServerUsers(RefreshUserListView, SelectedServer);
 			}
 
@@ -299,79 +300,30 @@ namespace ChitChat.Views {
 				}
 
 				serverSettingsButton.IsEnabled = ownerResult.Data;
+				serverInfoButton.IsEnabled = true;
+			} else {
+				serverSettingsButton.IsEnabled = false;
+				serverInfoButton.IsEnabled = false;
 			}
-
 		}
 
-		private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
+		protected override void OnClosing(WindowClosingEventArgs e)
+		{
 			// Stop the user refresh timer on window close
 			userRefreshTimer?.Stop();
+
+			base.OnClosing(e);
 		}
 
-		private void userFilterTextBox_TextChanged(object sender, TextChangedEventArgs e) {
+		private void userFilterTextBox_TextChanged(object sender, TextChangedEventArgs e)
+		{
 			// Refresh the user list view
-			// if (userListView.ItemsSource != null) {
-			// 	CollectionViewSource.GetDefaultView(userListView.ItemsSource).Refresh();
-			// }
+			chatInterface.FilterUsers();
 		}
 
 		private void filterServerTextBox_TextChanged(object sender, TextChangedEventArgs e) {
-			// Refresh the server list view
-			// if (serverListView.ItemsSource != null) {
-			// 	CollectionViewSource.GetDefaultView(serverListView.ItemsSource).Refresh();
-			// }
-		}
-
-		/// <summary>
-		/// Filters server list depending on userFilterTextBox input
-		/// </summary>
-		/// <param name="obj"></param>
-		/// <returns></returns>
-		private bool FilterUser(object obj) {
-			// If filter text is empty, return true on all servers
-			if (string.IsNullOrEmpty(userFilterTextBox.Text)) {
-				return true;
-			}
-
-			// If the text is the placeholder, return true
-			if (userFilterTextBox.Text == userFilterTextBox.Watermark) {
-				return true;
-			}
-
-			// If the object is a user and the username contains the filter text, return true
-			if (obj is User user) {
-				if (user.Username.Contains(userFilterTextBox.Text, StringComparison.CurrentCultureIgnoreCase)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		/// <summary>
-		/// Filters server list depending on filterServerTextBox input
-		/// </summary>
-		/// <param name="obj"></param>
-		/// <returns></returns>
-		private bool FilterServer(object obj) {
-			// If filter text is empty, return true on all servers
-			if (string.IsNullOrEmpty(filterServerTextBox.Text)) {
-				return true;
-			}
-
-			// If the text is the placeholder, return true
-			if (filterServerTextBox.Text == filterServerTextBox.Watermark) {
-				return true;
-			}
-
-			// If the object is a server and the server name contains the filter text, return true
-			if (obj is Server server) {
-				if (server.Name.Contains(filterServerTextBox.Text, StringComparison.CurrentCultureIgnoreCase)) {
-					return true;
-				}
-			}
-
-			return false;
+			//Refresh the server list view
+			chatInterface.FilterServers();
 		}
 	}
 }

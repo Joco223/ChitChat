@@ -2,7 +2,7 @@ using System;
 using Supabase.Postgrest.Attributes;
 using Supabase.Postgrest.Models;
 
-namespace ChitChat.Models {
+namespace ChitChat.DatabaseModels {
 	/// <summary>
 	/// Represents a user-server join in the database
 	/// </summary>

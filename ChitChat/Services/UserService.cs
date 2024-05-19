@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ChitChat.Helpers;
-using ChitChat.Models;
+using ChitChat.DatabaseModels;
 using Serilog;
 
 using Supabase.Gotrue;
@@ -28,7 +28,7 @@ namespace ChitChat.Services {
 		/// <param name="registerUser">RegisterUser object with all necessary data</param>
 		/// <param name="password">Password to reguster the user with</param>
 		/// <returns>Returns true if registration is sucesfull, false if not</returns>
-		public async Task<Result<string>> RegisterUser(Models.User registerUser, string password) {
+		public async Task<Result<string>> RegisterUser(DatabaseModels.User registerUser, string password) {
 			// Register user
 			Session? session = await SupabaseService.Client.Auth.SignUp(registerUser.Email, password);
 
@@ -39,10 +39,10 @@ namespace ChitChat.Services {
 			}
 
 			// Generate user data
-			var user = new Models.User(registerUser.Username, registerUser.Email, session.User.Id);
+			var user = new DatabaseModels.User(registerUser.Username, registerUser.Email, session.User.Id);
 
 			// Insert user data
-			var response = await SupabaseService.Client.From<Models.User>().Insert(user);
+			var response = await SupabaseService.Client.From<DatabaseModels.User>().Insert(user);
 
 			// If response is null return fail
 			if (response == null) {
@@ -76,14 +76,14 @@ namespace ChitChat.Services {
 		/// </summary>
 		/// <param name="server">Server from which to get users</param>
 		/// <returns>Returns list of all users</returns>
-		public async Task<Result<List<Models.User>>> GetServerUsers(Server server) {
+		public async Task<Result<List<DatabaseModels.User>>> GetServerUsers(Server server) {
 			// Get all usesr-server joins where server id is the same as the passed in server id
 			var usjRequest = await SupabaseService.Client.From<UserServerJoin>().Where(usj => usj.ServerId == server.Id).Get();
 
 			// Cheeck if request is not null
 			if (usjRequest == null) {
 				Log.Error($"Failed to get user-server joins on server {server.GetDebugInfo()}");
-				return Result<List<Models.User>>.Fail("Failed to get user-server joins on server");
+				return Result<List<DatabaseModels.User>>.Fail("Failed to get user-server joins on server");
 			}
 
 			var usjList = usjRequest.Models;
@@ -92,15 +92,15 @@ namespace ChitChat.Services {
 			var usersId = usjList.Select(usj => usj.UserId).ToList();
 
 			// Get all users where id is in the list of user ids
-			var userRequest = await SupabaseService.Client.From<Models.User>().Filter(u => u.Id, Supabase.Postgrest.Constants.Operator.In, usersId).Get();
+			var userRequest = await SupabaseService.Client.From<DatabaseModels.User>().Filter(u => u.Id, Supabase.Postgrest.Constants.Operator.In, usersId).Get();
 
 			// Check if request is not null
 			if (userRequest == null || userRequest.Model == null) {
 				Log.Error($"Failed to get users on server {server.GetDebugInfo()}");
-				return Result<List<Models.User>>.Fail("Failed to get users on server");
+				return Result<List<DatabaseModels.User>>.Fail("Failed to get users on server");
 			}
 
-			return Result<List<Models.User>>.OK(userRequest.Models);
+			return Result<List<DatabaseModels.User>>.OK(userRequest.Models);
 		}
 
 		/// <summary>
@@ -140,7 +140,7 @@ namespace ChitChat.Services {
 			}
 
 			// Get user data where uuid is the same as the current user id
-			var userRequest = await SupabaseService.Client.From<Models.User>().Where(u => u.Uuid == user.Id).Get();
+			var userRequest = await SupabaseService.Client.From<DatabaseModels.User>().Where(u => u.Uuid == user.Id).Get();
 			var userResponse = userRequest.Model;
 
 			// Check if request is not null
@@ -184,7 +184,7 @@ namespace ChitChat.Services {
 			}
 
 			// Get user data where uuid is the same as the current user id
-			var userRequest = await SupabaseService.Client.From<Models.User>().Where(u => u.Uuid == user.Id).Get();
+			var userRequest = await SupabaseService.Client.From<DatabaseModels.User>().Where(u => u.Uuid == user.Id).Get();
 			var userResponse = userRequest.Model;
 
 			// Check if request is not null
@@ -197,7 +197,7 @@ namespace ChitChat.Services {
 			userResponse.IsOnline = status;
 
 			// Update user data
-			var response = await SupabaseService.Client.From<Models.User>().Update(userResponse);
+			var response = await SupabaseService.Client.From<DatabaseModels.User>().Update(userResponse);
 
 			if (response == null) {
 				Log.Error($"Failed to update user {userResponse.GetDebugInfo()}");

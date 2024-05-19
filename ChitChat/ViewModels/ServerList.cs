@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChitChat.Helpers;
-using ChitChat.Models;
 using ChitChat.Services;
+using ChitChat.Models;
 
 namespace ChitChat.ViewModels {
 

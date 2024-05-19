@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using ChitChat.Helpers;
-using ChitChat.Models;
+using ChitChat.DatabaseModels;
 using ChitChat.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
+using DynamicData;
+using ChitChat.Models;
 
 namespace ChitChat.ViewModels {
 	/// <summary>
@@ -19,15 +23,57 @@ namespace ChitChat.ViewModels {
 		private List<Server> servers;
 
 		[ObservableProperty]
-		public List<User> currentServerUsers;
+		public List<ServerUser> currentServerUsers;
 
 		[ObservableProperty]
 		public List<Channel> currentServerChannels;
+
+		[ObservableProperty]
+		public ObservableCollection<Server> serversFiltered;
+
+		[ObservableProperty]
+		public ObservableCollection<ServerUser> usersFiltered;
+
+		public string ServerFilterText { get; set; } = string.Empty;
+
+		public string UserFilterText { get; set; } = string.Empty;
 
 		public ChatInterface() {
 			servers = [];
 			currentServerUsers = [];
 			currentServerChannels = [];
+			serversFiltered = [];
+			usersFiltered = [];
+		}
+
+		/// <summary>
+		/// Filters servers based on search text
+		/// </summary>
+		public void FilterServers() {
+			ServersFiltered.Clear();
+
+			// Check if SearchText is empty
+			if (string.IsNullOrEmpty(ServerFilterText)) {
+				ServersFiltered.AddRange(Servers);
+				return;
+			}
+
+			ServersFiltered.AddRange(Servers.Where(server => server.Name.Contains(ServerFilterText, StringComparison.CurrentCultureIgnoreCase)));
+		}
+
+		/// <summary>
+		/// Filters users based on search text
+		/// </summary>
+		public void FilterUsers() {
+			UsersFiltered.Clear();
+
+			// Check if SearchText is empty
+			if (string.IsNullOrEmpty(UserFilterText)) {
+				UsersFiltered.AddRange(CurrentServerUsers);
+				return;
+			}
+
+			UsersFiltered.AddRange(CurrentServerUsers.Where(user => user.User.Username.Contains(UserFilterText, StringComparison.CurrentCultureIgnoreCase)));
 		}
 
 		/// <summary>
@@ -41,6 +87,12 @@ namespace ChitChat.ViewModels {
 				return Result<string>.Fail("Error getting servers.");
 
 			Servers = servers.Data;
+
+			// Sort Servers by name
+			Servers.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
+
+			// Update filtered servers
+			FilterServers();
 
 			return Result<string>.OK("Servers fetched successfully");
 		}
@@ -70,8 +122,9 @@ namespace ChitChat.ViewModels {
 			if (currentUsers.Failed)
 				return Result<string>.Fail("Error getting users.");
 
-			CurrentServerUsers = currentUsers.Data;
+			CurrentServerUsers = ServerUser.ConvertToServerUserList(currentUsers.Data);
 
+			// Sort users by online status and then username
 			CurrentServerUsers.Sort(new OnlineUserComparer());
 
 			return Result<string>.OK("Users fetched successfully");
@@ -89,6 +142,9 @@ namespace ChitChat.ViewModels {
 				return Result<string>.Fail("Error getting channels.");
 
 			CurrentServerChannels = currentChannels.Data;
+
+			// Sort channels by name
+			CurrentServerChannels.Sort((a, b) => string.Compare(a.Name, b.Name, StringComparison.Ordinal));
 
 			return Result<string>.OK("Channels fetched successfully");
 		}
@@ -121,6 +177,7 @@ namespace ChitChat.ViewModels {
 			if (users.Failed)
 				return Result<string>.Fail("Error refreshing users.");
 
+
 			var userCount = await serverService.GetOnlineUserCount(selectedServer);
 
 			if (userCount.Failed)
@@ -129,6 +186,9 @@ namespace ChitChat.ViewModels {
 			selectedServer.OnlineUserCount = userCount.Data;
 
 			refreshUserListView.Invoke(selectedServer.OnlineUserCount, selectedServer.UserCount);
+
+			// Update filtered users
+			FilterUsers();
 
 			return Result<string>.OK("Users refreshed successfully");
 		}

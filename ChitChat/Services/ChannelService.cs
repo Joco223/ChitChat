@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using ChitChat.Helpers;
-using ChitChat.Models;
+using ChitChat.DatabaseModels;
 
 using Serilog;
 

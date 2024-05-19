@@ -1,5 +1,6 @@
 ﻿
 using System;
+using ChitChat.DatabaseModels;
 
 namespace ChitChat.Models {
 	/// <summary>

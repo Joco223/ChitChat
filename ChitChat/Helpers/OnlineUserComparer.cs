@@ -6,15 +6,15 @@ namespace ChitChat.Helpers {
 	/// Comparer for sorting a list of users
 	/// Online users go first and then offline users
 	/// </summary>
-	public class OnlineUserComparer : IComparer<User> {
-		public int Compare(User? x, User? y) {
+	public class OnlineUserComparer : IComparer<ServerUser> {
+		public int Compare(ServerUser? x, ServerUser? y) {
 			if (x == null || y == null) {
 				return 0;
 			}
 
-			if (x.IsOnline && !y.IsOnline) {
+			if (x.User.IsOnline && !y.User.IsOnline) {
 				return -1;
-			} else if (!x.IsOnline && y.IsOnline) {
+			} else if (!x.User.IsOnline && y.User.IsOnline) {
 				return 1;
 			} else {
 				return 0;
