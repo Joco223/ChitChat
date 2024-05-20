@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChat", "ChitChat\ChitChat.csproj", "{0F411B58-82B0-451F-BD32-B6650160E40D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChatClient", "ChitChatClient\ChitChatClient.csproj", "{0F411B58-82B0-451F-BD32-B6650160E40D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChatLauncher", "ChitChatLauncher\ChitChatLauncher.csproj", "{D7C929F6-0078-4788-A874-4A300E9AC3B9}"
 EndProject

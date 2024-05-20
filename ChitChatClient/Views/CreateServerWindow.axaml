@@ -1,0 +1,45 @@
+﻿<Window xmlns="https://github.com/avaloniaui"
+		x:Class="ChitChatClient.Views.CreateServerWindow"
+		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+		xmlns:vm="using:ChitChatClient.ViewModels"
+		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+		xmlns:gb="using:GroupBox.Avalonia.Controls"
+		xmlns:local="clr-namespace:ChitChatClient.Views"
+		mc:Ignorable="d"
+		x:DataType="vm:CreateServer"
+		Title="CreateServerWindow" Height="225" Width="400"
+		WindowStartupLocation="CenterScreen">
+	<Design.DataContext>
+		<!-- This only sets the DataContext for the previewer in an IDE,
+			 to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+		<vm:CreateServer/>
+	</Design.DataContext>
+	<Grid>
+		<gb:GroupBox Header="Create Server" Margin="10">
+			<Grid>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+					<RowDefinition Height="Auto"/>
+				</Grid.RowDefinitions>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Label Grid.Row="0" Grid.Column="0" Content="Server Name:"/>
+				<TextBox x:Name="serverNameTextBox" Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Path=Name}" TextChanged="serverNameTextBox_TextChanged" />
+				<Label Grid.Row="1" Grid.Column="0" Content="Server Description:"/>
+				<TextBox x:Name="serverDescriptionTextBox" Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Path=Description}" TextWrapping="WrapWithOverflow" TextChanged="serverDescriptionTextBox_TextChanged"/>
+				<Grid Grid.Row="2" Grid.ColumnSpan="2">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+					<Button x:Name="createServerButton" Grid.Column="0" Content="Create" Margin="5" Click="createServerButton_Click"/>
+					<Button x:Name="cancelButton" Grid.Column="1" Content="Cancel" Margin="5" Padding="5" Click="cancelButton_Click"/>
+				</Grid>
+			</Grid>
+		</gb:GroupBox>
+	</Grid>
+</Window>
