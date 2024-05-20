@@ -5,6 +5,7 @@ using ChitChatClient.Helpers;
 using ChitChatClient.DatabaseModels;
 
 using Serilog;
+using ChitChatClient.Repositories;
 
 namespace ChitChatClient.Services {
 	/// <summary>
@@ -15,7 +16,8 @@ namespace ChitChatClient.Services {
 
 		public static ChannelService Instance { get => instance; }
 
-		private readonly SupabaseService SupabaseService = SupabaseService.Instance;
+		private readonly ChannelRepository channelRepository = new();
+
 
 		private ChannelService() { }
 
@@ -26,18 +28,13 @@ namespace ChitChatClient.Services {
 		/// <returns>Returns list of channels</returns>
 		/// <exception cref="Exception"></exception>
 		public async Task<Result<List<Channel>>> GetChannels(Server server) {
-			// Get all channels for the given server
-			var response = await SupabaseService.Client.From<Channel>().Where(c => c.ServerId == server.Id).Get();
-			var channels = response.Models;
+			var result = await channelRepository.GetChannelsAsync(server);
 
-			// Check if response is not null and there are channels in the response
-			if (response == null || channels == null) {
-				Log.Error("Error getting channels");
-				return Result<List<Channel>>.Fail("Error getting channels.");
+			if (result.Failed) {
+				return Result<List<Channel>>.Fail(result.Error);
+			} else {
+				return Result<List<Channel>>.OK(result.Data);
 			}
-
-			// If response is not null and there are channels in the response, return the channels
-			return Result<List<Channel>>.OK(channels);
 		}
 
 		/// <summary>
@@ -47,18 +44,13 @@ namespace ChitChatClient.Services {
 		/// <returns></returns>
 		/// <exception cref="Exception"></exception>
 		public async Task<Result<string>> CreateChannel(Channel channel) {
-			// Insert the channel into the database
-			var response = await SupabaseService.Client.From<Channel>().Insert(channel);
-			var newChannel = response.Model;
+			var result = await channelRepository.CreateChannel(channel);
 
-			// If response response or newChannel is null, throw error
-			if (response == null || newChannel == null) {
-				Log.Error($"Error creating channel {channel}");
-				return Result<string>.Fail("Error creating channel.");
+			if (result.Failed) {
+				return Result<string>.Fail(result.Error);
+			} else {
+				return Result<string>.OK(result.Data);
 			}
-
-			// If response and newChannel are not null, return success
-			return Result<string>.OK("Channel created successfully");
 		}
 
 		/// <summary>
@@ -68,15 +60,12 @@ namespace ChitChatClient.Services {
 		/// <returns></returns>
 		/// <exception cref="Exception"></exception>
 		public async Task<Result<string>> DeleteChannel(Channel channel) {
-			try {
-				// Delete the channel from the database
-				await SupabaseService.Client.From<Channel>().Where(c => c.Id == channel.Id).Delete();
+			var result = await channelRepository.DeleteChannel(channel);
 
-				// Return success
-				return Result<string>.OK("Channel deleted successfully");
-			} catch (Exception ex) {
-				Log.Error($"Error deleting channel {channel} - {ex.Message}");
-				return Result<string>.Fail("Error deleting channel. " + ex.Message);
+			if (result.Failed) {
+				return Result<string>.Fail(result.Error);
+			} else {
+				return Result<string>.OK(result.Data);
 			}
 		}
 
@@ -87,18 +76,13 @@ namespace ChitChatClient.Services {
 		/// <returns>True if update is succesfull, false if not</returns>
 		/// <exception cref="Exception"></exception>
 		public async Task<Result<string>> UpdateChannel(Channel channel) {
-			// Update the channel in the database
-			var response = await SupabaseService.Client.From<Channel>().Update(channel);
-			var updatedChannel = response.Model;
+			var result = await channelRepository.UpdateChannel(channel);
 
-			// If response or updatedChannel is null, throw error
-			if (response == null || updatedChannel == null) {
-				Log.Error($"Error updating channel {channel}");
-				return Result<string>.Fail("Error updating channel.");
+			if (result.Failed) {
+				return Result<string>.Fail(result.Error);
+			} else {
+				return Result<string>.OK(result.Data);
 			}
-
-			// If response and updatedChannel are not null, return success
-			return Result<string>.OK("Channel updated successfully");
 		}
 	}
 }

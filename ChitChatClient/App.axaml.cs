@@ -38,12 +38,8 @@ public partial class App : Application
 	private void OnExit(object? sender, ControlledApplicationLifetimeExitEventArgs e)
 	{
 		try {
-
-				var user = UserService.GetUser();
-
 				// Only set offline status if user is logged in
-				if (!user.Failed)
-					Task.Run(() => UserService.SetUserOnline(false)).Wait();
+				Task.Run(() => UserService.SetUserOnlineStatus(false)).Wait();
 
 				Log.CloseAndFlush();
 			} catch (Exception) {

@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChatClient", "ChitChatC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChitChatLauncher", "ChitChatLauncher\ChitChatLauncher.csproj", "{D7C929F6-0078-4788-A874-4A300E9AC3B9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChitChatClient.Tests", "ChitChatClient.Tests\ChitChatClient.Tests.csproj", "{9A4E3BD5-80EF-4DE8-B2C6-97312F856263}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D7C929F6-0078-4788-A874-4A300E9AC3B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7C929F6-0078-4788-A874-4A300E9AC3B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7C929F6-0078-4788-A874-4A300E9AC3B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A4E3BD5-80EF-4DE8-B2C6-97312F856263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A4E3BD5-80EF-4DE8-B2C6-97312F856263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A4E3BD5-80EF-4DE8-B2C6-97312F856263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A4E3BD5-80EF-4DE8-B2C6-97312F856263}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

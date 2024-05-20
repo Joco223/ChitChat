@@ -1,3 +1,6 @@
+using System.Diagnostics;
+using Serilog;
+
 namespace ChitChatClient.Helpers {
 	public class Result<T> {
 		public T Data { get; set; }
@@ -15,10 +18,52 @@ namespace ChitChatClient.Helpers {
 			ErrorType = 0;
 		}
 
-		public static Result<T> OK(T data) => new() { Data = data, Failed = false };
+		public static Result<T> OK(T data, bool customData = false) {
+			Result<T> result = new() {
+				Failed = false
+			};
 
-		public static Result<T> Fail(string error) => new() { Error = error, Failed = true };
+			// If custom data is not set, log the message to the logger
+			if (!customData) {
+				var methodInfo = new StackTrace().GetFrame(2).GetMethod();
+				var className = methodInfo.ReflectedType.Name;
+				Log.Information($"{data} - {className}");
+			}
 
-		public static Result<T> Fail(string error, int errorType) => new() { Error = error, Failed = true, ErrorType = errorType };
+			return result;
+		}
+
+		public static Result<T> Fail(string error, bool customData = false) {
+			Result<T> result = new() {
+				Error = error,
+				Failed = true
+			};
+
+			// If custom data is not set, log the message to the logger
+			if (!customData) {
+				var methodInfo = new StackTrace().GetFrame(2).GetMethod();
+				var className = methodInfo.ReflectedType.Name;
+				Log.Error($"{error} - {className}");
+			}
+
+			return result;
+		}
+
+		public static Result<T> Fail(string error, int errorType, bool customData = false)  {
+			Result<T> result = new() {
+				Error = error,
+				ErrorType = errorType,
+				Failed = true
+			};
+
+			// If custom data is not set, log the message to the logger
+			if (!customData) {
+				var methodInfo = new StackTrace().GetFrame(2).GetMethod();
+				var className = methodInfo.ReflectedType.Name;
+				Log.Error($"{error}, {errorType} - {className}");
+			}
+
+			return result;
+		}
 	}
 }

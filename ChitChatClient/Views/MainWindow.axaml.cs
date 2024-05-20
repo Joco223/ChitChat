@@ -106,7 +106,7 @@ public partial class MainWindow : Window
 		}
 
 		// Set user online
-		var setOnlineResult = await userService.SetUserOnline(true);
+		var setOnlineResult = await userService.SetUserOnlineStatus(true);
 
 		// Check if user is online
 		if (setOnlineResult.Failed) {
